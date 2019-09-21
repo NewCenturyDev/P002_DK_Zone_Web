@@ -1,18 +1,14 @@
 <template>
-  <div>
-    <Navigation></Navigation>
-  </div>
+  <Main></Main>
 </template>
 
 <script>
-  import Navigation from './components/Navigation'
-  export default {
-    components: {
-      Navigation
-    }
+import Main from './components/Main';
+
+export default {
+  name: 'App',
+  components: {
+    Main,
   }
+};
 </script>
-
-<style scoped>
-
-</style>
