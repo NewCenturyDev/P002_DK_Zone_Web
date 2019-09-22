@@ -7,13 +7,13 @@
                 <v-toolbar-items>
                     <v-btn icon><v-icon>search</v-icon></v-btn>
                     <v-btn icon><v-icon>person</v-icon></v-btn>
-                    <v-btn icon><v-icon>double_arrow</v-icon></v-btn>
+                    <v-btn icon><v-icon>exit_to_app</v-icon></v-btn>
                 </v-toolbar-items>
             </v-toolbar>
         </nav>
         <v-container id="navigation">
-            <v-layout row>
-                <v-flex xs12 sm6 md4 lg4>
+            <v-layout wrap justify-center>
+                <v-flex xs12 sm9 md6>
                     <!-- 피드 양식 (피드1로 구현) - 실제로는 백엔드에서 DB내용을 싹 읽어서 data() 양식안에 배열로 넣어주고 반복문 돌려서 프론트에 추가해주는 것으로 만들 예정-->
                     <v-card class="feed" style="margin: 15px;">
                         <v-img class="feed_image" :src=feed_image[0]></v-img>
@@ -24,6 +24,9 @@
                         </v-card-title>
                         <v-card-text class="feed_text">
                             <div> {{feed_text[0]}} </div>
+                            <br/>
+                            <div style="float: left; font-size: 13px;"> {{feed_user_id[0]}} </div>
+                            <div style="float: right; font-size: 11px;"> {{feed_timestamp[0]}} </div>
                         </v-card-text>
                         <v-card-text class="feed_tags">
                             <v-btn small disabled style="margin: 2px;">{{feed_tags[0][0]}}</v-btn>
@@ -37,7 +40,9 @@
                         </v-card-actions>
                     </v-card>
                 </v-flex>
-                <v-flex xs12 sm6 md4 lg4>
+            </v-layout>
+            <v-layout justify-center>
+                <v-flex xs12 sm9 md6>
                     <!-- 피드 양식 (피드2로 구현) - 실제로는 백엔드에서 DB내용을 싹 읽어서 data() 양식안에 배열로 넣어주고 반복문 돌려서 프론트에 추가해주는 것으로 만들 예정-->
                     <v-card class="feed" style="margin: 15px;">
                         <v-img class="feed_image" :src=feed_image[1]></v-img>
@@ -48,6 +53,9 @@
                         </v-card-title>
                         <v-card-text class="feed_text">
                             <div> {{feed_text[0]}} </div>
+                            <br/>
+                            <div style="float: left; font-size: 13px;"> {{feed_user_id[1]}} </div>
+                            <div style="float: right; font-size: 11px;"> {{feed_timestamp[1]}} </div>
                         </v-card-text>
                         <v-card-text class="feed_tags">
                             <v-btn small disabled style="margin: 2px;">{{feed_tags[1][0]}}</v-btn>
@@ -68,11 +76,14 @@
 export default {
     data(){
         return{
+            feed_profile_img: ["http://placehold.it/30x30","http://placehold.it/30x30"],
             feed_image: ["http://placehold.it/500x300/","http://placehold.it/500x300/"],
             feed_title: ["피드1 제목","피드2 제목"],
             feed_text: ["피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet","피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet"],
             feed_likes: [3,8],
-            feed_tags: [["#굿즈","#마블","#카카오프렌즈","#악세사리"],["#테스트","#과연이거만들수있을까"]]
+            feed_tags: [["#굿즈","#마블","#카카오프렌즈","#악세사리"],["#테스트","#과연이거만들수있을까"]],
+            feed_user_id:["testuser1","testuser2"],
+            feed_timestamp:["2018-01-02","2019-09-03"]
         }
     }
 }
