@@ -9,29 +9,29 @@
             </v-toolbar>
         </nav>
         <v-container>
-            <v-layout style="margin: 15px">
-                <v-flex xs12 justify-center>
+            <v-layout style="margin: 20px" justify-center>
+                <v-flex xs12 sm9>
                     <v-card>
                         <v-img src="http://placehold.it/2000x500"></v-img>
                     </v-card>
                 </v-flex>
             </v-layout>
-            <v-layout wrap>
-                <v-flex xs12 sm4>
+            <v-layout wrap justify-center>
+                <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
                         <v-card-title primary-title>{{hot_topic[0]}}</v-card-title>
                         <v-card-text>{{hot_topic_text[0]}}</v-card-text>
                     </v-card>
                 </v-flex>
-                <v-flex xs12 sm4>
+                <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
                         <v-card-title primary-title>{{hot_topic[1]}}</v-card-title>
                         <v-card-text>{{hot_topic_text[1]}}</v-card-text>
                     </v-card>
                 </v-flex>
-                <v-flex xs12 sm4>
+                <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
                         <v-card-title primary-title>{{hot_topic[2]}}</v-card-title>
@@ -39,22 +39,22 @@
                     </v-card>
                 </v-flex>
             </v-layout>
-            <v-layout wrap>
-                <v-flex xs12 sm4>
+            <v-layout wrap justify-center>
+                <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
                         <v-card-title primary-title>Service Promotion 1</v-card-title>
                         <v-card-text>사용자들과 덕후존을 공유해 보세요!</v-card-text>
                     </v-card>
                 </v-flex>
-                <v-flex xs12 sm4>
+                <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
                         <v-card-title primary-title>Service Promotion 2</v-card-title>
                         <v-card-text>사용자들과 덕후존을 공유해 보세요!</v-card-text>
                     </v-card>
                 </v-flex>
-                <v-flex xs12 sm4>
+                <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
                         <v-card-title primary-title>Service Promotion 3</v-card-title>
