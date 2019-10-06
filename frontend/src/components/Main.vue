@@ -98,7 +98,7 @@ export default {
             ],
             Menuitems2: [
                 {title: '내 프로필'},
-                {title: '구독 목록'},
+                {title: '스크랩 북'},
                 {title: '쪽지함'},
                 {title: '설정'}
             ],
