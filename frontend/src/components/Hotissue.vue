@@ -1,0 +1,172 @@
+<template>
+    <v-app>
+        <!-- 상단바 -->
+        <nav>
+            <v-toolbar color="cyan" light>
+                <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-toolbar-title style="color: white; margin-left: 20px;">DK-Zone</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn icon><v-icon>search</v-icon></v-btn>
+                    <v-btn icon><v-icon>exit_to_app</v-icon></v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+        </nav>
+        <!-- 좌측 탭 메뉴 -->
+        <v-navigation-drawer v-model="drawer" absolute temporary>
+            <v-list-item>
+                <v-list-item-avatar>
+                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                    <v-list-item-title> {{ Current_UserName }} </v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-list dense>
+                <v-list-item v-for="item in Menuitems" :key="item.title" link>
+                    <v-list-item-title>
+                        <v-list-item-title> {{ item.title }} </v-list-item-title>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list dense>
+                <v-list-item v-for="item in Menuitems2" :key="item.title" link>
+                    <v-list-item-title>
+                        <v-list-item-title> {{ item.title }} </v-list-item-title>
+                    </v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+        <!-- 핫플레이스 본문 -->
+        <v-container id="feeds">
+            <v-layout wrap justify-center>
+                <v-flex xs12 sm5>
+                    <v-card style="margin: 10px;">
+                        <v-img src="map.png"></v-img>
+                    </v-card>
+                </v-flex>
+                <v-flex xs12 sm5>
+                    <v-card style="margin: 10px;">
+                        <v-card-title>
+                            <div>
+                                <h3 style="width:100%;">덕후 핫플레이스 </h3>
+                            </div>
+                            <v-menu offset-y>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn color="primary" text v-on="on">
+                                    지역
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item>
+                                        <v-list-item-title>수도권</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-card-title>
+                        
+                        <v-tabs v-model="active" color="cyan" light>
+                            <v-tab>강남 코엑스</v-tab>
+                            <v-tab-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>VR 엑스포</v-list-item-title>
+                                        <v-list-item-subtitle>http://vrexpo.kr/</v-list-item-subtitle>
+                                        <v-list-item-subtitle>VR EXPO 2019는 5G를 활용한 VR/AR 관련 제조, 국방, 의료, 교육, 건축, 플랫폼, 게임, 테마파크, 영상 등 전 산업분야가 함께 하는 국내 최대 VR/AR 전문 산업 전시회입니다.</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>2019 K-POP 굿즈 플리마켓</v-list-item-title>
+                                        <v-list-item-subtitle>http://www.kpopmarket.co.kr/</v-list-item-subtitle>
+                                        <v-list-item-subtitle>제1회를 맞이하는 "2019 K-POP 굿즈 플리마켓"은 국내 최대 규모의 K-Pop 굿즈 중심으로 열리는 플리마켓으로 각종 아이돌 굿즈와 애장품을 자유롭게 사고 팔고, 다양한 부대행사와 이벤트, 공연 등의 콘텐츠를 한곳에 모아놓은 아이돌 굿즈 공유의 장이자 축제입니다.</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>글로벌 게임 챌린지 2019</v-list-item-title>
+                                        <v-list-item-subtitle>http://www.k-game.org/</v-list-item-subtitle>
+                                        <v-list-item-subtitle>전국 게임관련 학과 학생들의 우수 아이디어 및 게임작품 한 자리에서 공동 발표</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-tab-item>
+                            <v-tab>양재 AT센터</v-tab>
+                            <v-tab-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>제 171회 서울 코믹월드</v-list-item-title>
+                                        <v-list-item-subtitle>http://www.comicw.co.kr//</v-list-item-subtitle>
+                                        <v-list-item-subtitle>코믹월드는 "아마추어 만화 종합 행사"입니다. 아마추어 만화가들이 자신의 작품을 소개하고 서로 교류할 뿐 아니라 만화인들간의 커뮤니케이션을 공유하는 장을 만드는 것을 목표로 합니다.</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-tab-item>
+                            <v-tab>대치 SETEC</v-tab>
+                            <v-tab-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>제 170회 서울 코믹월드</v-list-item-title>
+                                        <v-list-item-subtitle>http://www.comicw.co.kr//</v-list-item-subtitle>
+                                        <v-list-item-subtitle>코믹월드는 "아마추어 만화 종합 행사"입니다. 아마추어 만화가들이 자신의 작품을 소개하고 서로 교류할 뿐 아니라 만화인들간의 커뮤니케이션을 공유하는 장을 만드는 것을 목표로 합니다.</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-tab-item>
+                            <v-tab>마곡 컨벤션</v-tab>
+                            <v-tab-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>전시회 정보가 없습니다.</v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-tab-item>
+                            <v-tab>일산 KINTEX</v-tab>
+                            <v-tab-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>제 12회 서울모터쇼</v-list-item-title>
+                                        <v-list-item-subtitle>http://www.motorshow.or.kr/main.do</v-list-item-subtitle>
+                                        <v-list-item-subtitle>SustainableㆍConnectedㆍMobility(지속가능하고 지능화된 이동혁명)</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-tab-item>
+                            <v-tab>송도 컨벤시아</v-tab>
+                            <v-tab-item>
+                                <v-list-item two-line>
+                                    <v-list-item-content>
+                                        <v-list-item-title>전시회 정보가 없습니다.</v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-tab-item>
+                        </v-tabs>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </v-app>
+</template>
+
+<script>
+export default {
+    data(){
+        return{
+            Current_UserName: "TestUser",
+            drawer: null,
+            Menuitems: [
+                {title: '덕후 타임라인'},
+                {title: '덕후 핫이슈'},
+                {title: '덕후 핫플레이스'},
+            ],
+            Menuitems2: [
+                {title: '내 프로필'},
+                {title: '스크랩 북'},
+                {title: '쪽지함'},
+                {title: '설정'}
+            ]
+        }
+    }
+}
+</script>
+
+<style scoped>
+</style>
