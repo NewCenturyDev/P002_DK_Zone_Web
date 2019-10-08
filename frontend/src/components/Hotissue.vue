@@ -39,107 +39,35 @@
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
-        <!-- 핫플레이스 본문 -->
+        <!-- 핫이슈 본문 -->
+        <!-- 추후 백엔드 구축시 네이버 연예뉴스 탭과 몇몇 동호회, 서브컬쳐, 취미 커뮤니티에서 최신글/기사 약간을 크롤링하도록 할것.-->
         <v-container id="feeds">
             <v-layout wrap justify-center>
-                <v-flex xs12 sm5>
-                    <v-card style="margin: 10px;">
-                        <v-img src="map.png"></v-img>
-                    </v-card>
-                </v-flex>
-                <v-flex xs12 sm5>
-                    <v-card style="margin: 10px;">
-                        <v-card-title>
-                            <div>
-                                <h3 style="width:100%;">덕후 핫플레이스 </h3>
-                            </div>
-                            <v-menu offset-y>
-                                <template v-slot:activator="{ on }">
-                                    <v-btn color="primary" text v-on="on">
-                                    지역
-                                    </v-btn>
-                                </template>
-                                <v-list>
-                                    <v-list-item>
-                                        <v-list-item-title>수도권</v-list-item-title>
-                                    </v-list-item>
-                                </v-list>
-                            </v-menu>
-                        </v-card-title>
-                        
-                        <v-tabs v-model="active" color="cyan" light>
-                            <v-tab>강남 코엑스</v-tab>
-                            <v-tab-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>VR 엑스포</v-list-item-title>
-                                        <v-list-item-subtitle>http://vrexpo.kr/</v-list-item-subtitle>
-                                        <v-list-item-subtitle>VR EXPO 2019는 5G를 활용한 VR/AR 관련 제조, 국방, 의료, 교육, 건축, 플랫폼, 게임, 테마파크, 영상 등 전 산업분야가 함께 하는 국내 최대 VR/AR 전문 산업 전시회입니다.</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>2019 K-POP 굿즈 플리마켓</v-list-item-title>
-                                        <v-list-item-subtitle>http://www.kpopmarket.co.kr/</v-list-item-subtitle>
-                                        <v-list-item-subtitle>제1회를 맞이하는 "2019 K-POP 굿즈 플리마켓"은 국내 최대 규모의 K-Pop 굿즈 중심으로 열리는 플리마켓으로 각종 아이돌 굿즈와 애장품을 자유롭게 사고 팔고, 다양한 부대행사와 이벤트, 공연 등의 콘텐츠를 한곳에 모아놓은 아이돌 굿즈 공유의 장이자 축제입니다.</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>글로벌 게임 챌린지 2019</v-list-item-title>
-                                        <v-list-item-subtitle>http://www.k-game.org/</v-list-item-subtitle>
-                                        <v-list-item-subtitle>전국 게임관련 학과 학생들의 우수 아이디어 및 게임작품 한 자리에서 공동 발표</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-tab-item>
-                            <v-tab>양재 AT센터</v-tab>
-                            <v-tab-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>제 171회 서울 코믹월드</v-list-item-title>
-                                        <v-list-item-subtitle>http://www.comicw.co.kr//</v-list-item-subtitle>
-                                        <v-list-item-subtitle>코믹월드는 "아마추어 만화 종합 행사"입니다. 아마추어 만화가들이 자신의 작품을 소개하고 서로 교류할 뿐 아니라 만화인들간의 커뮤니케이션을 공유하는 장을 만드는 것을 목표로 합니다.</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-tab-item>
-                            <v-tab>대치 SETEC</v-tab>
-                            <v-tab-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>제 170회 서울 코믹월드</v-list-item-title>
-                                        <v-list-item-subtitle>http://www.comicw.co.kr//</v-list-item-subtitle>
-                                        <v-list-item-subtitle>코믹월드는 "아마추어 만화 종합 행사"입니다. 아마추어 만화가들이 자신의 작품을 소개하고 서로 교류할 뿐 아니라 만화인들간의 커뮤니케이션을 공유하는 장을 만드는 것을 목표로 합니다.</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-tab-item>
-                            <v-tab>마곡 컨벤션</v-tab>
-                            <v-tab-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>전시회 정보가 없습니다.</v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-tab-item>
-                            <v-tab>일산 KINTEX</v-tab>
-                            <v-tab-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>제 12회 서울모터쇼</v-list-item-title>
-                                        <v-list-item-subtitle>http://www.motorshow.or.kr/main.do</v-list-item-subtitle>
-                                        <v-list-item-subtitle>SustainableㆍConnectedㆍMobility(지속가능하고 지능화된 이동혁명)</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-tab-item>
-                            <v-tab>송도 컨벤시아</v-tab>
-                            <v-tab-item>
-                                <v-list-item two-line>
-                                    <v-list-item-content>
-                                        <v-list-item-title>전시회 정보가 없습니다.</v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-tab-item>
-                        </v-tabs>
-                    </v-card>
+                <v-flex xs12 sm8>
+                    <v-data-iterator :items="News" :rows-per-page-items="RowsPerPage" :pagination.sync="Pagination" content-tag="v-layout" row wrap>
+                        <v-flex xs12 slot="item" slot-scope="props">
+                            <v-card class="feed" style="margin: 15px;">
+                                <v-card-title primary-title class="feed_title">
+                                    <div>
+                                        <h3 class="headline mb-0" style="width:100%;"> {{props.item.news_title}} </h3>
+                                    </div>
+                                </v-card-title>
+                                <v-card-text class="feed_text">
+                                    <v-layout>
+                                        <v-flex xs12 sm4 style="margin-bottom: 25px">
+                                            <v-img class="feed_image" style="width: 300px; height: 150px;" :src=props.item.news_image></v-img>
+                                        </v-flex>
+                                        <v-flex xs12 sm8 style="margin-bottom: 25px;">
+                                            <div> {{props.item.news_text}} </div>
+                                            <br/>
+                                            <div style="float: left; font-size: 13px;"><a :href=props.item.news_source> {{props.item.news_source}} </a></div>
+                                            <div style="float: right; font-size: 11px;"> {{props.item.news_timestamp}} </div>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                    </v-data-iterator>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -162,6 +90,19 @@ export default {
                 {title: '스크랩 북'},
                 {title: '쪽지함'},
                 {title: '설정'}
+            ],
+            rowsPerPageItems: [1],
+            pagination: {
+                rowsPerPage: 1
+            },
+            News: [
+                {
+                    news_image: "https://ssl.pstatic.net/mimgnews/image/382/2019/10/08/0000767173_001_20191008132418003.jpg?type=w540",
+                    news_title: "‘녹두전’ 장동윤♥김소현, 밤낮 너무 다르다 (ft.티격태격)",
+                    news_text: "장동윤과 김소현의 ‘단짠’ 오가는 극과 극 낮과 밤이 포착됐다. KBS 2TV 월화드라마 ‘조선로코-녹두전’(극본 임예진·백소연 연출 김동휘·강수연) 제작진은 8일 밤과 낮이 다른 두 얼굴의 녹두(장동윤 분)와 동주(김소현 분)의 스틸컷을 공개했다.",
+                    news_source: "https://entertain.naver.com/read?oid=382&aid=0000767173",
+                    news_timestamp: "2019-10-08"
+                },
             ]
         }
     }
