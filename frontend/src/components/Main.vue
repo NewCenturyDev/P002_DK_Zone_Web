@@ -4,12 +4,12 @@
         <nav>
             <v-toolbar color="cyan" light>
                 <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-                <v-toolbar-title style="color: white; margin-left: 20px;">DK-Zone</v-toolbar-title>
+                <v-toolbar-title @click="gotoMain" style="color: white; margin-left: 20px; cursor: pointer;">DK-Zone</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                    <v-btn icon><v-icon>create</v-icon></v-btn>
-                    <v-btn icon><v-icon>search</v-icon></v-btn>
-                    <v-btn icon><v-icon>exit_to_app</v-icon></v-btn>
+                    <v-btn icon @click="gotoCreate"><v-icon>create</v-icon></v-btn>
+                    <v-btn icon @click="gotoSearch"><v-icon>search</v-icon></v-btn>
+                    <v-btn icon @click="Logout"><v-icon>exit_to_app</v-icon></v-btn>
                 </v-toolbar-items>
             </v-toolbar>
         </nav>
@@ -25,7 +25,7 @@
             </v-list-item>
             <v-divider></v-divider>
             <v-list dense>
-                <v-list-item v-for="item in Menuitems" :key="item.title" link>
+                <v-list-item v-for="item in Menuitems" :key="item.title" :to="item.url" link>
                     <v-list-item-title>
                         <v-list-item-title> {{ item.title }} </v-list-item-title>
                     </v-list-item-title>
@@ -33,7 +33,7 @@
             </v-list>
             <v-divider></v-divider>
             <v-list dense>
-                <v-list-item v-for="item in Menuitems2" :key="item.title" link>
+                <v-list-item v-for="item in Menuitems2" :key="item.title" :to="item.url" link>
                     <v-list-item-title>
                         <v-list-item-title> {{ item.title }} </v-list-item-title>
                     </v-list-item-title>
@@ -92,15 +92,15 @@ export default {
             Current_UserName: "TestUser",
             drawer: null,
             Menuitems: [
-                {title: '덕후 타임라인'},
-                {title: '덕후 핫이슈'},
-                {title: '덕후 핫플레이스'},
+                {title: '덕후 타임라인', url:'/lists'},
+                {title: '덕후 핫이슈', url:'/issue'},
+                {title: '덕후 핫플레이스', url:'/place'},
             ],
             Menuitems2: [
-                {title: '내 프로필'},
-                {title: '스크랩 북'},
-                {title: '쪽지함'},
-                {title: '설정'}
+                {title: '내 프로필', url:'/profile'},
+                {title: '스크랩 북', url:'/scrap'},
+                {title: '쪽지함', url:'/msgbox'},
+                {title: '설정', url:'/setting'}
             ],
             rowsPerPageItems: [1],
             pagination: {
@@ -136,98 +136,32 @@ export default {
                     feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
                     feed_user_id: "testuser3",
                     feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
+                }
             ],
+        }
+    },
+    methods: {
+        //eslint-disable-next-line
+        Logout: function (event) {
+            this.$http.get('/users/logout')
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.push('/');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
+        },
+        gotoMain: function(){
+            this.$router.push('/lists');
+        },
+        gotoCreate: function(){
+            this.$router.push('/create');
+        },
+        gotoSearch: function (){
+            this.$router.push('/search');
         }
     }
 }

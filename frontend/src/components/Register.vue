@@ -2,10 +2,8 @@
     <v-app>
         <nav>
             <v-toolbar color="cyan" light>
-                <v-toolbar-title style="color: white; margin-left: 20px;">DK-Zone</v-toolbar-title>
+                <v-toolbar-title @click="gotoIntro" style="color: white; margin-left: 20px; cursor: pointer;">DK-Zone</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon><v-icon>person_add</v-icon></v-btn>
-                <v-btn icon><v-icon>exit_to_app</v-icon></v-btn>
             </v-toolbar>
         </nav>
         <v-container>
@@ -18,20 +16,20 @@
                             </div>
                         </v-card-title>
                         <v-form style="margin: 0 20%;">
-                            <v-text-field label="아이디"></v-text-field>
-                            <v-text-field label="비밀번호" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="비밀번호 확인" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="성명" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="닉네임" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="이메일" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="전화번호" style="margin-top:-15px;"></v-text-field>
-                            <v-btn large outlined style="width:60%; margin: 0 20%;">회원가입</v-btn>
+                            <v-text-field label="아이디" v-model="user.userid"></v-text-field>
+                            <v-text-field label="비밀번호" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="비밀번호 확인" v-model="user.userpwck" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="성명" v-model="user.name" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="닉네임" v-model="user.nick" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="이메일" v-model="user.email" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="전화번호" v-model="user.phone" style="margin-top:-15px;"></v-text-field>
+                            <v-btn large outlined @click="Signup" style="width:60%; margin: 0 20%;">회원가입</v-btn>
                         </v-form>
                         <br/>
                         <br/>
                         <v-card-text>
-                            <v-btn text small style="margin-right: 10px;">로그인</v-btn>
-                            <v-btn text small style="margin-right: 10px;">ID/PW 찾기</v-btn>
+                            <v-btn @click="gotoLogin" text small style="margin-right: 10px;">로그인</v-btn>
+                            <v-btn @click="gotoFinder" text small style="margin-right: 10px;">ID/PW 찾기</v-btn>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -44,6 +42,45 @@
 export default {
     data(){
         return{
+            user: {
+                userid: '',
+                userpw: '',
+                userpwck: '',
+                name: '',
+                nick: '',
+                email: '',
+                phone: ''
+            }
+        }
+    },
+    methods: {
+        //eslint-disable-next-line
+        Signup: function (event) {
+            this.$http.post('/users/signup',{
+                user: this.user
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.push('/auth');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.push('/auth/register');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
+        },
+        gotoIntro: function(){
+            this.$router.push('/');
+        },
+        gotoLogin: function (){
+            this.$router.push('/auth');
+        },
+        gotoFinder: function(){
+            this.$router.push('/auth/finder');
         }
     }
 }

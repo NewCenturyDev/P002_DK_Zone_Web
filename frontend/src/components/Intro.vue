@@ -2,10 +2,10 @@
     <v-app>
         <nav>
             <v-toolbar color="cyan" light>
-                <v-toolbar-title style="color: white; margin-left: 20px;">DK-Zone</v-toolbar-title>
+                <v-toolbar-title @click="gotoIntro" style="color: white; margin-left: 20px; cursor: pointer;">DK-Zone</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon><v-icon>person_add</v-icon></v-btn>
-                <v-btn icon><v-icon>exit_to_app</v-icon></v-btn>
+                <v-btn @click="gotoRegister" icon><v-icon>person_add</v-icon></v-btn>
+                <v-btn @click="gotoLogin" icon><v-icon>exit_to_app</v-icon></v-btn>
             </v-toolbar>
         </nav>
         <v-container>
@@ -67,7 +67,7 @@
             <v-container>
                 <v-layout>
                     <v-flex xs12 justify-center>
-                        덕후존 ver 0.0.1.2 | All-rights-reserved - HyperSoft.co.ltd - Dev. HyperTech99
+                        덕후존 ver 0.0.1.8 | All-rights-reserved - HyperSoft.co.ltd - Dev. HyperTech99
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -81,6 +81,17 @@ export default {
         return{
             hot_topic:["Hot Topic 1","Hot Topic 2","Hot Topic 3"],
             hot_topic_text:["이것이 나의 덕후존이다!","마블 히어로즈 총집합!","BTS 컬렉션!"]
+        }
+    },
+    methods:{
+        gotoIntro: function(){
+            this.$router.push('/');
+        },
+        gotoLogin: function(){
+            this.$router.push('/auth');
+        },
+        gotoRegister: function (){
+            this.$router.push('/auth/register');
         }
     }
 }
