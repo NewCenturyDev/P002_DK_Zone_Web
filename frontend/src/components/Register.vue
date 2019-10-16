@@ -17,8 +17,8 @@
                         </v-card-title>
                         <v-form style="margin: 0 20%;">
                             <v-text-field label="아이디" v-model="user.userid"></v-text-field>
-                            <v-text-field label="비밀번호" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="비밀번호 확인" v-model="user.userpwck" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field type="password" label="비밀번호" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field type="password" label="비밀번호 확인" v-model="user.userpwck" style="margin-top:-15px;"></v-text-field>
                             <v-text-field label="성명" v-model="user.name" style="margin-top:-15px;"></v-text-field>
                             <v-text-field label="닉네임" v-model="user.nick" style="margin-top:-15px;"></v-text-field>
                             <v-text-field label="이메일" v-model="user.email" style="margin-top:-15px;"></v-text-field>

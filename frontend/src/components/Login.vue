@@ -17,7 +17,7 @@
                         </v-card-title>
                         <v-form style="margin: 0 20%;">
                             <v-text-field label="아이디" v-model="user.userid"></v-text-field>
-                            <v-text-field label="패스워드" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field type="password" label="패스워드" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
                             <v-btn @click="Login" large outlined style="width:60%; margin: 0 20%;">로그인</v-btn>
                         </v-form>
                         <br/>

@@ -21,8 +21,8 @@
                             </v-tab>
                             <v-tab-item>
                                 <v-form style="margin: 0 20%;">
-                                    <v-text-field label="성명"></v-text-field>
-                                    <v-text-field label="이메일" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.name" label="성명"></v-text-field>
+                                    <v-text-field v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
                                     <v-btn @click="Findid" large outlined style="width:60%; margin: 0 20%;">ID 찾기</v-btn>
                                 </v-form>
                             </v-tab-item>
@@ -31,9 +31,9 @@
                             </v-tab>
                             <v-tab-item>
                                 <v-form style="margin: 0 20%;">
-                                    <v-text-field label="아이디"></v-text-field>
-                                    <v-text-field label="성명" style="margin-top:-15px;"></v-text-field>
-                                    <v-text-field label="이메일" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.id" label="아이디"></v-text-field>
+                                    <v-text-field v-model="user.name" label="성명" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
                                     <v-btn @click="Findpw" large outlined style="width:60%; margin: 0 20%;">PW 찾기</v-btn>
                                 </v-form>
                             </v-tab-item>
@@ -55,14 +55,49 @@
 export default {
     data(){
         return{
+            user: {
+                id: '',
+                name: '',
+                email: ''
+            }
         }
     },
     methods:{
-        Findid:{
-            //backend측 id찾기 라우터와 연결
+        Findid: function(){
+            this.$http.post('/users/idfinder',{
+                user: this.user
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.push('/auth');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.push('/auth/finder');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
         },
-        Findpw:{
-            //frontend측 id찾기 라우터와 연결
+        Findpw: function(){
+            this.$http.post('/users/pwfinder',{
+                user: this.user
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.push('/auth');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.push('/auth/finder');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
         },
         gotoIntro: function(){
             this.$router.push('/');
