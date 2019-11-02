@@ -8,6 +8,7 @@ import Main from '@/components/Main'
 import Hotissue from '@/components/Hotissue'
 import Hotplace from '@/components/Hotplace'
 import Search from '@/components/Search'
+import Create from '@/components/Create'
 import Profile from '@/components/Profile'
 import Scrapbook from '@/components/Scrapbook'
 import Messagebox from '@/components/Messagebox'
@@ -25,6 +26,7 @@ export const router = new Router({
         {path: '/issue', name: 'issue', component: Hotissue},
         {path: '/place', name: 'place', component: Hotplace},
         {path: '/search', name: 'search', component: Search},
+        {path: '/create', name: 'create', component: Create},
         {path: '/profile', name: 'profile', component: Profile},
         {path: '/scrap', name: 'scrap', component: Scrapbook},
         {path: '/msgbox', name: 'msgbox', component: Messagebox},

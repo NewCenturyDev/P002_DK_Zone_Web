@@ -22,7 +22,7 @@
                             <v-text-field label="성명" v-model="user.name" style="margin-top:-15px;"></v-text-field>
                             <v-text-field label="닉네임" v-model="user.nick" style="margin-top:-15px;"></v-text-field>
                             <v-text-field label="이메일" v-model="user.email" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="전화번호" v-model="user.phone" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field @keyup.enter="Signup" label="전화번호" v-model="user.phone" style="margin-top:-15px;"></v-text-field>
                             <v-btn large outlined @click="Signup" style="width:60%; margin: 0 20%;">회원가입</v-btn>
                         </v-form>
                         <br/>
@@ -56,12 +56,14 @@ export default {
     methods: {
         //eslint-disable-next-line
         Signup: function (event) {
+            let self = this;
             this.$http.post('/users/signup',{
                 user: this.user
             })
             .then((res) => {
                 if(res.data.success == 1){
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/auth');
                 }
                 else{
@@ -81,6 +83,15 @@ export default {
         },
         gotoFinder: function(){
             this.$router.push('/auth/finder');
+        },
+        clear: function(){
+            this.user.userid = '';
+            this.user.userpw = '';
+            this.user.userpwck = '';
+            this.user.name = '';
+            this.user.nick = '';
+            this.user.email = '';
+            this.user.phone = '';
         }
     }
 }

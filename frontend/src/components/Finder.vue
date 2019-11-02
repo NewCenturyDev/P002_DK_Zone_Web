@@ -22,7 +22,7 @@
                             <v-tab-item>
                                 <v-form style="margin: 0 20%;">
                                     <v-text-field v-model="user.name" label="성명"></v-text-field>
-                                    <v-text-field v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field @keyup.enter="Findid" v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
                                     <v-btn @click="Findid" large outlined style="width:60%; margin: 0 20%;">ID 찾기</v-btn>
                                 </v-form>
                             </v-tab-item>
@@ -33,7 +33,7 @@
                                 <v-form style="margin: 0 20%;">
                                     <v-text-field v-model="user.id" label="아이디"></v-text-field>
                                     <v-text-field v-model="user.name" label="성명" style="margin-top:-15px;"></v-text-field>
-                                    <v-text-field v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field @keyup.enter="Findpw" v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
                                     <v-btn @click="Findpw" large outlined style="width:60%; margin: 0 20%;">PW 찾기</v-btn>
                                 </v-form>
                             </v-tab-item>
@@ -64,38 +64,46 @@ export default {
     },
     methods:{
         Findid: function(){
+            let self = this;
             this.$http.post('/users/idfinder',{
                 user: this.user
             })
             .then((res) => {
                 if(res.data.success == 1){
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/auth');
                 }
                 else{
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/auth/finder');
                 }
             })
             .catch(function (err) {
+                self.clear();
                 alert(err);
             })
         },
         Findpw: function(){
+            let self = this;
             this.$http.post('/users/pwfinder',{
                 user: this.user
             })
             .then((res) => {
                 if(res.data.success == 1){
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/auth');
                 }
                 else{
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/auth/finder');
                 }
             })
             .catch(function (err) {
+                self.clear();
                 alert(err);
             })
         },
@@ -108,6 +116,11 @@ export default {
         gotoRegister: function (){
             this.$router.push('/auth/register');
         },
+        clear: function(){
+            this.user.id = '';
+            this.user.name = '';
+            this.user.email = '';
+        }
     }
 }
 </script>

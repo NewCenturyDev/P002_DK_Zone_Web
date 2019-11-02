@@ -17,7 +17,7 @@
                         </v-card-title>
                         <v-form style="margin: 0 20%;">
                             <v-text-field label="아이디" v-model="user.userid"></v-text-field>
-                            <v-text-field type="password" label="패스워드" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field @keyup.enter="Login" type="password" label="패스워드" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
                             <v-btn @click="Login" large outlined style="width:60%; margin: 0 20%;">로그인</v-btn>
                         </v-form>
                         <br/>
@@ -46,20 +46,24 @@ export default {
     methods: {
         //eslint-disable-next-line
         Login: function (event) {
+            let self = this;
             this.$http.post('/users/login',{
                 user: this.user
             })
             .then((res) => {
                 if(res.data.success == 1){
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/lists');
                 }
                 else{
                     alert(res.data.message);
+                    self.clear();
                     this.$router.push('/auth');
                 }
             })
             .catch(function (err) {
+                self.clear();
                 alert(err);
             })
         },
@@ -71,6 +75,10 @@ export default {
         },
         gotoFinder: function(){
             this.$router.push('/auth/finder');
+        },
+        clear: function(){
+            this.user.userid = '';
+            this.user.userpw = '';
         }
     }
 }
