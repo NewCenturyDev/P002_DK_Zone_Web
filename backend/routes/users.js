@@ -160,7 +160,7 @@ router.post('/signup', function(req, res){
           return;
         }
         else if(rows2[i].email == info.email){
-          console.log('닉네임 중복');
+          console.log('이메일 중복');
           res.json ({
             success: 0,
             message: '이미 가입한 유저의 이메일 주소입니다. 다른 이메일을 입력하거나 기존 아이디로 로그인 해 주세요.'

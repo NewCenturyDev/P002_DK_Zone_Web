@@ -52,12 +52,13 @@
                             <v-tab-item>
                                 <v-layout row wrap>
                                 <v-flex xs12 md4 style="margin: 20px">
-                                    <v-img style="width: 200px; height: 200px;" src="http://placehold.it/200x200"></v-img>
-                                    <a style>프로필 사진 변경</a>
+                                    <v-img style="width: 200px; height: 200px;" :src=Current_UserInfo.photo></v-img>
+                                    <v-btn small text @click="ChangePhoto" style="margin-top 10px;">프로필 사진 변경</v-btn>
+                                    <v-btn small text @click="ChangeBio" style="margin-top 10px;">개인 메시지 변경</v-btn>
                                 </v-flex>
                                 <v-flex xs12 md7 sytle="margin: 20px;">
-                                    <h1 style="margin: 20px;"> {{ Current_UserName }} </h1>
-                                    <h5 style="margin: 20px; font-weight: normal;"> {{Current_UserBiography}}</h5>
+                                    <h1 style="margin: 20px;"> {{ Current_UserInfo.nick }} </h1>
+                                    <h5 style="margin: 20px; font-weight: normal;"> {{Current_UserInfo.userbio}}</h5>
                                 </v-flex>
                                 </v-layout>
                             </v-tab-item>
@@ -70,19 +71,19 @@
                                         <tbody>
                                         <tr>
                                             <td>덕후네임:</td>
-                                            <td>{{Current_UserName}}</td>
+                                            <td>{{Current_UserInfo.nick}}</td>
                                         </tr>
                                         <tr>
                                             <td>성명(실명):</td>
-                                            <td>{{Current_RealName}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>전화번호:</td>
-                                            <td>{{Current_UserPhone}}</td>
+                                            <td>{{Current_UserInfo.name}}</td>
                                         </tr>
                                         <tr>
                                             <td>E - Mail:</td>
-                                            <td>{{Current_UserEmail}}</td>
+                                            <td>{{Current_UserInfo.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>전화번호:</td>
+                                            <td>{{Current_UserInfo.phone}}</td>
                                         </tr>
                                         </tbody>
                                     </v-simple-table>
@@ -100,11 +101,14 @@
 export default {
     data(){
         return{
-            Current_UserName: "TestUser",
-            Current_RealName: "홍길동",
-            Current_UserEmail: "test@service.com",
-            Current_UserPhone: "010-1111-2222",
-            Current_UserBiography: "저는 그러니까 어쩌고 저쩌고 이러쿵 저러쿵 아쌀라말라잇꿈~ 이러니까 저러니까 Lorem ipsum 아무말 대잔치 테스트 케이스 이것은 유저 설명 자기소개를 쓰는 칸이고요 어쩌고 저쩌고 테스트 데이터라고요 내용은 신경쓰지 마세요 ",
+            Current_UserInfo: {
+                photo: "",
+                nick: "",
+                name: "",
+                email: "",
+                phone: "",
+                userbio: ""
+            },
             drawer: null,
             Menuitems: [
                 {title: '덕후 타임라인', url:'/lists'},
@@ -133,12 +137,43 @@ export default {
                 alert(err);
             })
         },
+        Loadinfo: function () {
+            let self = this;
+            this.$http.get('/profile/load')
+            .then((res) => {
+                if(res.data.success == 1){
+                    self.Current_UserInfo.photo = res.data.photo;
+                    self.Current_UserInfo.nick = res.data.nick;
+                    self.Current_UserInfo.name = res.data.name;
+                    self.Current_UserInfo.email = res.data.email;
+                    self.Current_UserInfo.phone = res.data.phone;
+                    self.Current_UserInfo.userbio = res.data.userbio;
+                    return;
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.push('/lists');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        Changephoto: function(){
+            //TODO
+        },
+        Changebio: function(){
+            //TODO
+        },
         gotoMain: function(){
             this.$router.push('/lists');
         },
         gotoSearch: function (){
             this.$router.push('/search');
         }
+    },
+    beforeMount() {
+        this.Loadinfo();
     }
 }
 </script>
