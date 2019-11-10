@@ -53,8 +53,16 @@
                                 <v-layout row wrap>
                                 <v-flex xs12 md4 style="margin: 20px">
                                     <v-img style="width: 200px; height: 200px;" :src=Current_UserInfo.photo></v-img>
-                                    <v-btn small text @click="ChangePhoto" style="margin-top 10px;">프로필 사진 변경</v-btn>
-                                    <v-btn small text @click="ChangeBio" style="margin-top 10px;">개인 메시지 변경</v-btn>
+                                    <v-btn small text @click="OpenChangephoto" :class="{ active: (this.mode1 || this.mode2) }" style="margin-top 10px;">프로필 사진 변경</v-btn>
+                                    <v-btn small text @click="OpenChangebio" :class="{ active: (this.mode1 || this.mode2) }" style="margin-top 10px;">개인 메시지 변경</v-btn>
+                                    <v-form id="modifybio" :class="{ active: !this.mode1 }">
+                                        <v-text-field v-model="New_userbio" label="새 개인 메시지" style="margin-top: 15px;"></v-text-field>
+                                        <v-btn small text @click="Changebio" style="margin-top 10px;">변경</v-btn>
+                                    </v-form>
+                                    <v-form id="modifyphoto" :class="{ active: !this.mode2 }">
+                                        <v-file-input label="새 프로필 사진" style="margin-top: 15px;"></v-file-input>
+                                        <v-btn small text @click="Changephoto" style="margin-top 10px;">변경</v-btn>
+                                    </v-form>
                                 </v-flex>
                                 <v-flex xs12 md7 sytle="margin: 20px;">
                                     <h1 style="margin: 20px;"> {{ Current_UserInfo.nick }} </h1>
@@ -109,6 +117,10 @@ export default {
                 phone: "",
                 userbio: ""
             },
+            New_userbio: "",
+            New_photo: "",
+            mode1: false,
+            mode2: false,
             drawer: null,
             Menuitems: [
                 {title: '덕후 타임라인', url:'/lists'},
@@ -137,6 +149,12 @@ export default {
                 alert(err);
             })
         },
+        gotoMain: function(){
+            this.$router.push('/lists');
+        },
+        gotoSearch: function (){
+            this.$router.push('/search');
+        },
         Loadinfo: function () {
             let self = this;
             this.$http.get('/profile/load')
@@ -159,17 +177,28 @@ export default {
                 alert(err);
             });
         },
-        Changephoto: function(){
-            //TODO
+        OpenChangebio: function(){
+            this.mode1 = true;
+        },
+        OpenChangephoto: function(){
+            this.mode2 = true;
         },
         Changebio: function(){
+            let self = this;
+            this.$http.post('/profile/modifybio', {
+                newbio: this.New_userbio
+            })
+            .then((res) => {
+                alert(res.data.message);
+                self.mode1 = false;
+                this.$router.go('/profile');
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        Changephoto: function(){
             //TODO
-        },
-        gotoMain: function(){
-            this.$router.push('/lists');
-        },
-        gotoSearch: function (){
-            this.$router.push('/search');
         }
     },
     beforeMount() {
@@ -179,4 +208,7 @@ export default {
 </script>
 
 <style scoped>
+.active{
+    display: none;
+}
 </style>

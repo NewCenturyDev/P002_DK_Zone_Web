@@ -39,28 +39,53 @@
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
-        <!-- 스크랩북 본문 -->
+        <!-- 친구목록 본문 -->
         <v-container id="feeds">
             <v-layout wrap justify-center>
-                <v-flex xs12 sm9 md6>
-                    <!-- 스크랩북 양식 (데이터 반복자 사용) - 실제로는 백엔드에서 DB내용을 싹 읽어서 data() 양식안에 배열로 넣어주고 반복문 돌려서 프론트에 추가해주는 것으로 만들 예정-->
-                    <v-data-iterator :items="Scraps" :rows-per-page-items="RowsPerPage" :pagination.sync="Pagination" content-tag="v-layout" row wrap>
-                        <v-flex xs12 slot="item" slot-scope="props">
+                <v-flex xs12 sm9>
+                    <!-- 친구 추가-->
+                    <v-dialog v-model="addmodal" width="400">
+                        <template v-slot:activator="{ on }">
+                            <v-spacer></v-spacer>
+                            <v-btn color="cyan" light v-on="on">친구 추가</v-btn>
+                            <v-spacer></v-spacer>
+                        </template>
+                        <v-card>
+                            <v-card-title>
+                                친구 추가
+                            </v-card-title>
+                            <v-card-text>
+                                E-mail 주소를 입력하여 친구를 검색할 수 있습니다.
+                                <v-form>
+                                    <v-text-field v-model="keyword" label="친구 E-mail"></v-text-field>
+                                </v-form>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="primary" text @click="AddFriends">추가</v-btn>
+                                <v-btn color="primary" text @click="addmodal = false">취소</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <!-- 친구목록 양식 (데이터 반복자 사용)-->
+                    <v-data-iterator :items="Friends" :items-per-page.sync="itemsPerPage" no-data-text="친구가 없습니다. 친구를 추가해 보세요." content-tag="v-layout" content-class="d-inline-flex">
+                        <v-flex xs12 sm6 md4 slot="item" slot-scope="props">
                             <v-card class="feed" style="margin: 15px;">
                                 <v-card-title primary-title class="feed_title">
                                     <div>
-                                        <h3 class="headline mb-0" style="width:100%;"> {{props.item.scrap_UserId}} </h3>
+                                        <h3 class="headline mb-0" style="width:100%;"> {{props.item.friend_nick}} </h3>
                                     </div>
                                 </v-card-title>
+                                <v-flex xs12>
+                                    <v-img :src=props.item.friend_photo></v-img>
+                                </v-flex>
                                 <v-card-text class="feed_text">
-                                    <v-list-item-avatar>
-                                        <v-img :src=props.item.scrap_Profile_img></v-img>
-                                    </v-list-item-avatar>
-                                    <div> {{props.item.scrap_UserBio}} </div>
+                                    <div> {{props.item.friend_bio}} </div>
                                 </v-card-text>
                                 <v-card-action>
-                                    <v-btn text>방문하기</v-btn>
-                                    <v-btn text>스크랩 해제</v-btn>
+                                    <v-btn text>쪽지 보내기</v-btn>
+                                    <v-btn text @click="RemoveFriends(props.item.friend_nick)">친구 삭제</v-btn>
                                 </v-card-action>
                             </v-card>
                         </v-flex>
@@ -84,26 +109,14 @@ export default {
             ],
             Menuitems2: [
                 {title: '내 프로필', url:'/profile'},
-                {title: '스크랩 북', url:'/scrap'},
+                {title: '친구 목록', url:'/scrap'},
                 {title: '쪽지함', url:'/msgbox'},
                 {title: '설정', url:'/setting'}
             ],
-            rowsPerPageItems: [1],
-            pagination: {
-                rowsPerPage: 1
-            },
-            Scraps: [
-                {
-                    scrap_Profile_img: "https://randomuser.me/api/portraits/men/78.jpg",
-                    scrap_UserId: "testuser1",
-                    scrap_UserBio: "testuser1 유저 소개가 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                },
-                {
-                    scrap_Profile_img: "https://randomuser.me/api/portraits/men/78.jpg",
-                    scrap_UserId: "testuser2",
-                    scrap_UserBio: "testuser2 유저 소개가 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                }
-            ],
+            itemsPerPage: 10000,
+            addmodal: false,
+            keyword: '',
+            Friends: []
         }
     },
     methods: {
@@ -125,7 +138,65 @@ export default {
         },
         gotoSearch: function (){
             this.$router.push('/search');
+        },
+        LoadFriends: function (){
+            let self = this;
+            this.$http.get('/friend/load')
+            .then((res) => {
+                if(res.data == null){
+                    alert("DB 오류");
+                    this.$router.push('/lists');
+                    return;
+                }
+                else{
+                    self.Friends = res.data;
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        AddFriends: function(){
+            this.$http.post('/friend/add', {
+                keyword: this.keyword
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.go('/scrap');
+                    return;
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/scrap');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        RemoveFriends: function(removethis){
+            this.$http.post('/friend/remove', {
+                keyword: removethis
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.go('/scrap');
+                    return;
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/scrap');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         }
+    },
+    beforeMount() {
+        this.LoadFriends();
     }
 }
 </script>

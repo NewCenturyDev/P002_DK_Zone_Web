@@ -70,4 +70,33 @@ router.get('/load', function(req, res){
 });
 /*---------------------------- 프로필 로드 기능 끝 ----------------------------*/
 
+/*------------------------------ 개인 메시지 변경 기능 ------------------------------*/
+router.post('/modifybio', function(req, res){
+    /* 변수 선언 */
+    var user = req.session.user;
+    var sql = 'UPDATE member SET bio = ? WHERE id = ?';
+    var newbio = req.body.newbio;
+    var defbio = "개인 메시지가 없습니다.";
+    var params = [newbio, user.id];
+    
+    if(newbio == ''){
+        params = [defbio, user.id];
+    }
+    connection.query(sql, params, function(err){
+        if(err) {
+            console.log('개인 메세지 수정 실패 - ', err);
+            res.json ({
+                message: "서버측 사정으로 DB오류가 발생하였습니다. 다음에 다시 이용해 주십시오."
+            });
+        }
+        else {
+            console.log('개인 메시지 수정 완료');
+            res.json ({
+                message: "개인 메시지가 수정 되었습니다."
+            });
+        }
+    });
+});
+/*---------------------------- 개인 메시지 변경 기능 끝 ----------------------------*/
+
 module.exports = router;

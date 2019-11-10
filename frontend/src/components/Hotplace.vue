@@ -44,7 +44,7 @@
             <v-layout wrap justify-center>
                 <v-flex xs12 sm5>
                     <v-card style="margin: 10px;">
-                        <v-img src="map.png"></v-img>
+                        <v-img src="map.PNG"></v-img>
                     </v-card>
                 </v-flex>
                 <v-flex xs12 sm5>
