@@ -16,10 +16,10 @@
         <v-navigation-drawer v-model="drawer" absolute temporary>
             <v-list-item>
                 <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                    <v-img :src=Current_UserInfo.photo></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                    <v-list-item-title> {{ Current_UserName }} </v-list-item-title>
+                    <v-list-item-title> {{ Current_UserInfo.nick }} </v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
             <v-divider></v-divider>

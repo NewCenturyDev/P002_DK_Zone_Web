@@ -98,14 +98,16 @@ router.post('/signup', function(req, res){
     'name': req.body.user.name,
     'nick': req.body.user.nick,
     'email': req.body.user.email,
-    'phone': req.body.user.phone
+    'phone': req.body.user.phone,
+    'photo': 'Profiles/default.png',
+    'bio': '개인 메시지가 없습니다.'
   };
   //양식 검증용 정규식
   var RegExp1 = /^[0-9]*$/;
   var RegExp2 = /^[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[@]{1}[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[.]{1}[A-Za-z]{1,5}$/;
   //Mysql 쿼리 양식
-  var sql = 'INSERT INTO member (id, pw, name, nick, email, phone, photo, bio) VALUES(?, ?, ?, ?, ?, ?, NULL, NULL)';
-  var params = [info.userid,info.userpw,info.name,info.nick,info.email,info.phone];
+  var sql = 'INSERT INTO member (id, pw, name, nick, email, phone, photo, bio) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+  var params = [info.userid,info.userpw,info.name,info.nick,info.email,info.phone,info.photo,info.bio];
   var sql2 = 'SELECT * FROM member WHERE id = "' + info.userid + '"';
 
   /* 알고리즘 */

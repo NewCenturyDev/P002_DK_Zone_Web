@@ -36,7 +36,7 @@ router.get('/load', function(req, res){
     /* 변수 선언 */
     var user = req.session.user;
     var sql = 'SELECT * FROM member WHERE id = "' + user.id + '"';
-    var defphoto = "https://randomuser.me/api/portraits/men/78.jpg";
+    var defphoto = "./Profiles/default.png";
     var defbio = "개인 메시지가 없습니다."
 
     connection.query(sql, function(err, rows){

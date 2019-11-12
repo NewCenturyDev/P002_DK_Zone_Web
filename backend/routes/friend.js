@@ -90,7 +90,7 @@ router.post('/add', function(req, res){
                             message: '친구로 추가되었습니다.'
                         });
                     }
-                }); 
+                });
             }
         }
     });

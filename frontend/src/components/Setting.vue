@@ -16,10 +16,10 @@
         <v-navigation-drawer v-model="drawer" absolute temporary>
             <v-list-item>
                 <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                    <v-img :src=Current_UserInfo.photo></v-img>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                    <v-list-item-title> {{ Current_UserName }} </v-list-item-title>
+                    <v-list-item-title> {{ Current_UserInfo.nick }} </v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
             <v-divider></v-divider>
@@ -89,6 +89,14 @@
 export default {
     data: function(){
         return{
+            Current_UserInfo: {
+                photo: "",
+                nick: "",
+                name: "",
+                email: "",
+                phone: "",
+                userbio: ""
+            },
             drawer: null,
             user: {
                 userid: '',
@@ -125,6 +133,28 @@ export default {
             .catch(function (err) {
                 alert(err);
             })
+        },
+        LoadProfile: function () {
+            let self = this;
+            this.$http.get('/profile/load')
+            .then((res) => {
+                if(res.data.success == 1){
+                    self.Current_UserInfo.photo = res.data.photo;
+                    self.Current_UserInfo.nick = res.data.nick;
+                    self.Current_UserInfo.name = res.data.name;
+                    self.Current_UserInfo.email = res.data.email;
+                    self.Current_UserInfo.phone = res.data.phone;
+                    self.Current_UserInfo.userbio = res.data.userbio;
+                    return;
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.push('/lists');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         },
         Modify: function () {
             let self = this;    //this.$http.post같이 안에서 뭔가 실행하면 this의 맥락이 바뀌는경우가 있음.
@@ -210,6 +240,9 @@ export default {
         gotoSearch: function (){
             this.$router.push('/search');
         }
+    },
+    beforeMount() {
+        this.LoadProfile();
     }
 }
 </script>
