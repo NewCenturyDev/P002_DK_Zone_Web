@@ -83,7 +83,7 @@ export default {
             ],
             Menuitems2: [
                 {title: '내 프로필', url:'/profile'},
-                {title: '스크랩 북', url:'/scrap'},
+                {title: '친구 목록', url:'/scrap'},
                 {title: '쪽지함', url:'/msgbox'},
                 {title: '설정', url:'/setting'}
             ],
