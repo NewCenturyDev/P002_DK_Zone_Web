@@ -69,7 +69,7 @@
                         </v-card>
                     </v-dialog>
                     <!-- 친구목록 양식 (데이터 반복자 사용)-->
-                    <v-data-iterator :items="Friends" :items-per-page.sync="itemsPerPage" no-data-text="친구가 없습니다. 친구를 추가해 보세요." content-tag="v-layout" content-class="d-inline-flex">
+                    <v-data-iterator :items="Friends" :items-per-page.sync="itemsPerPage" no-data-text="친구가 없습니다. 친구를 추가해 보세요.">
                         <v-flex xs12 sm6 md4 slot="item" slot-scope="props">
                             <v-card class="feed" style="margin: 15px;">
                                 <v-card-title primary-title class="feed_title">
@@ -84,7 +84,29 @@
                                     <div> {{props.item.friend_bio}} </div>
                                 </v-card-text>
                                 <v-card-action>
-                                    <v-btn text>쪽지 보내기</v-btn>
+                                    <!--메시지 보내기-->
+                                    <v-btn text @click.stop="$set(msgsendmodal, props.item.friend_id, true)">쪽지 보내기</v-btn>
+                                    <v-dialog v-model="msgsendmodal[props.item.friend_id]" width="400">
+                                        <v-card>
+                                        <v-card-title>
+                                            <h4> 메시지 답장 </h4>
+                                        <v-card-title>
+                                        </v-card-title>
+                                            <h6> To: {{props.item.friend_nick}} </h6>
+                                        </v-card-title>
+                                        <v-card-text>
+                                            <v-form>
+                                                <v-textarea label="메시지 내용" auto-grow=true; v-model="newMsg"></v-textarea>
+                                            </v-form>
+                                        </v-card-text>
+                                        <v-divider></v-divider>
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn color="primary" text @click="SendMsg(props.item.friend_id)">보내기</v-btn>
+                                            <v-btn color="primary" text @click.stop="$set(msgsendmodal, props.item.friend_id, false)">취소</v-btn>
+                                        </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
                                     <v-btn text @click="RemoveFriends(props.item.friend_nick)">친구 삭제</v-btn>
                                 </v-card-action>
                             </v-card>
@@ -122,7 +144,9 @@ export default {
             ],
             itemsPerPage: 10000,
             addmodal: false,
+            msgsendmodal: {},
             keyword: '',
+            newMsg: '',
             Friends: []
         }
     },
@@ -139,6 +163,12 @@ export default {
             .catch(function (err) {
                 alert(err);
             })
+        },
+        gotoMain: function(){
+            this.$router.push('/lists');
+        },
+        gotoSearch: function (){
+            this.$router.push('/search');
         },
         LoadProfile: function () {
             let self = this;
@@ -217,11 +247,24 @@ export default {
                 alert(err);
             });
         },
-        gotoMain: function(){
-            this.$router.push('/lists');
-        },
-        gotoSearch: function (){
-            this.$router.push('/search');
+        SendMsg: function (receiver){
+            this.$http.post('/message/send', {
+                res_id: receiver,
+                text: this.newMsg
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.go('/msgbox');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/msgbox');
+                }
+            })
+            .catch(function (err){
+                alert(err);
+            });
         }
     },
     beforeMount() {

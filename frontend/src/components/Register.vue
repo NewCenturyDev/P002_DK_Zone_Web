@@ -17,11 +17,11 @@
                         </v-card-title>
                         <v-form style="margin: 0 20%;">
                             <v-text-field label="아이디" v-model="user.userid"></v-text-field>
-                            <v-text-field type="password" label="비밀번호" v-model="user.userpw" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field type="password" label="비밀번호 확인" v-model="user.userpwck" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="성명" v-model="user.name" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="닉네임" v-model="user.nick" style="margin-top:-15px;"></v-text-field>
-                            <v-text-field label="이메일" v-model="user.email" style="margin-top:-15px;"></v-text-field>
+                            <v-text-field type="password" label="비밀번호" v-model="user.userpw" counter=20 style="margin-top:-15px;"></v-text-field>
+                            <v-text-field type="password" label="비밀번호 확인" v-model="user.userpwck" counter=20 style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="성명" v-model="user.name" counter=20 style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="닉네임" v-model="user.nick" counter=20 style="margin-top:-15px;"></v-text-field>
+                            <v-text-field label="이메일" v-model="user.email" counter=20 style="margin-top:-15px;"></v-text-field>
                             <v-text-field @keyup.enter="Signup" label="전화번호" v-model="user.phone" style="margin-top:-15px;"></v-text-field>
                             <v-btn large outlined @click="Signup" style="width:60%; margin: 0 20%;">회원가입</v-btn>
                         </v-form>

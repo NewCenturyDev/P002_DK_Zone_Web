@@ -42,7 +42,7 @@
         <!-- 쪽지함 본문 -->
         <v-container id="feeds">
             <v-layout wrap justify-center>
-                <v-flex xs12 sm8 sytle="margin: 20px;">
+                <v-flex xs12 sm6 sytle="margin: 20px;">
                     <v-card>
                         <v-card-title>
                             <h3>쪽지함</h3>
@@ -50,16 +50,64 @@
                         <v-simple-table>
                             <thead>
                                 <tr>
-                                    <th style="width: 25%">발신자</th>
-                                    <th style="width: 55%">쪽지 내용</th>
-                                    <th style="width: 20%">수신 시각</th>
+                                    <th style="width: 5%">no.</th>
+                                    <th style="width: 40%">발신자</th>
+                                    <th style="width: 40%">수신 시각</th>
+                                    <th style="width: 7.5%"></th>
+                                    <th style="width: 7.5%"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in Msgs" :key="item.Msg_UserName">
-                                    <td>{{item.Msg_UserName}}</td>
-                                    <td>{{item.Msg_Text}}</td>
-                                    <td>{{item.Msg_Time}}</td>
+                                <tr v-for="item in Msgs" :key="item.msg_num">
+                                    <td>{{item.msg_num}}</td>
+                                    <td>{{item.msg_nick}}</td>
+                                    <td>{{item.msg_time}}</td>
+                                    <td>
+                                        <v-btn color="primary" text @click.stop="$set(msgmodal, item.msg_num, true)">읽기</v-btn>
+                                        <!--메시지 상세 내용-->
+                                        <v-dialog v-model="msgmodal[item.msg_num]" width="400">
+                                            <v-card>
+                                                <v-card-title>
+                                                    <h4> From: {{item.msg_nick}} </h4>
+                                                <v-card-title>
+                                                </v-card-title>
+                                                    <h6> {{item.msg_time}}</h6>
+                                                </v-card-title>
+                                                <v-card-text>
+                                                    {{item.msg_text}}
+                                                </v-card-text>
+                                                <v-divider></v-divider>
+                                                <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <!--메시지 답장-->
+                                                    <v-btn color="primary" text @click.stop="$set(msgsendmodal, item.msg_num, true)">답장</v-btn>
+                                                    <v-dialog v-model="msgsendmodal[item.msg_num]" width="400">
+                                                        <v-card>
+                                                        <v-card-title>
+                                                            <h4> 메시지 답장 </h4>
+                                                        <v-card-title>
+                                                        </v-card-title>
+                                                            <h6> To: {{item.msg_nick}} </h6>
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-form>
+                                                                <v-textarea label="메시지 내용" auto-grow=true; v-model="newMsg"></v-textarea>
+                                                            </v-form>
+                                                        </v-card-text>
+                                                        <v-divider></v-divider>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn color="primary" text @click="SendMsg(item.msg_id)">보내기</v-btn>
+                                                            <v-btn color="primary" text @click.stop="$set(msgsendmodal, item.msg_num, false)">취소</v-btn>
+                                                        </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                    <v-btn color="primary" text @click.stop="$set(msgmodal, item.msg_num, false)">닫기</v-btn>
+                                                </v-card-actions>
+                                            </v-card>
+                                        </v-dialog>
+                                    </td>
+                                    <td><v-btn color="primary" text @click="RemoveMsg(item.msg_num)">삭제</v-btn></td>
                                 </tr>
                             </tbody>
                         </v-simple-table>
@@ -94,38 +142,10 @@ export default {
                 {title: '쪽지함', url:'/msgbox'},
                 {title: '설정', url:'/setting'}
             ],
-            Msgs: [
-                {
-                    Msg_UserName: "testuser1",
-                    Msg_Text: "testuser1 유저가 보낸 메시지 내용이 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                    Msg_Time: "2019-10-01"
-                },
-                {
-                    Msg_UserName: "testuser1",
-                    Msg_Text: "testuser1 유저가 보낸 메시지 내용이 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                    Msg_Time: "2019-10-01"
-                },
-                {
-                    Msg_UserName: "testuser1",
-                    Msg_Text: "testuser1 유저가 보낸 메시지 내용이 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                    Msg_Time: "2019-10-01"
-                },
-                {
-                    Msg_UserName: "testuser1",
-                    Msg_Text: "testuser1 유저가 보낸 메시지 내용이 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                    Msg_Time: "2019-10-01"
-                },
-                {
-                    Msg_UserName: "testuser1",
-                    Msg_Text: "testuser1 유저가 보낸 메시지 내용이 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                    Msg_Time: "2019-10-01"
-                },
-                {
-                    Msg_UserName: "testuser1",
-                    Msg_Text: "testuser1 유저가 보낸 메시지 내용이 들어갈 칸입니다 어쩌고 저쩌고 앗쌀라말라이꿈~",
-                    Msg_Time: "2019-10-01"
-                },
-            ],
+            msgmodal: {},
+            msgsendmodal: {},
+            newMsg: '',
+            Msgs: []
         }
     },
     methods: {
@@ -141,6 +161,12 @@ export default {
             .catch(function (err) {
                 alert(err);
             })
+        },
+        gotoMain: function(){
+            this.$router.push('/lists');
+        },
+        gotoSearch: function (){
+            this.$router.push('/search');
         },
         LoadProfile: function () {
             let self = this;
@@ -164,14 +190,63 @@ export default {
                 alert(err);
             });
         },
-        gotoMain: function(){
-            this.$router.push('/lists');
+        LoadMsgs: function (){
+            let self = this;
+            this.$http.get('/message/load')
+            .then((res) => {
+                if(res.data == null){
+                    alert("DB 오류");
+                    this.$router.push('/lists');
+                    return;
+                }
+                else{
+                    self.Msgs = res.data;
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         },
-        gotoSearch: function (){
-            this.$router.push('/search');
+        SendMsg: function (receiver){
+            this.$http.post('/message/send', {
+                res_id: receiver,
+                text: this.newMsg
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.go('/msgbox');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/msgbox');
+                }
+            })
+            .catch(function (err){
+                alert(err);
+            });
+        },
+        RemoveMsg: function (removethis){
+            this.$http.post('/message/remove', {
+                keyword: removethis
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.go('/msgbox');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/msgbox');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         }
     },
     beforeMount() {
+        this.LoadMsgs();
         this.LoadProfile();
     }
 }

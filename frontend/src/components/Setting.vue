@@ -56,10 +56,10 @@
                                     <v-btn @click="Modify" large outlined style="width:40%; margin: 0 30%; margin-bottom: 50px;">본인 확인</v-btn>
                                 </v-form>
                                 <v-form id="remodifyform" :class="{ active: !this.mode }" style="width: 50%; margin: 50px 25%">
-                                    <v-text-field v-model="user.userpw" type="password" label="비밀번호" style="margin-top:-15px;"></v-text-field>
-                                    <v-text-field v-model="user.userpwck" type="password" label="비밀번호 확인" style="margin-top:-15px;"></v-text-field>
-                                    <v-text-field v-model="user.nick" label="닉네임" style="margin-top:-15px;"></v-text-field>
-                                    <v-text-field v-model="user.email" label="이메일" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.userpw" type="password" counter=20 label="비밀번호" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.userpwck" type="password" counter=20 label="비밀번호 확인" style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.nick" label="닉네임" counter=20 style="margin-top:-15px;"></v-text-field>
+                                    <v-text-field v-model="user.email" label="이메일" counter=20 style="margin-top:-15px;"></v-text-field>
                                     <v-text-field @keyup.enter="Remodify" v-model="user.phone" label="전화번호" style="margin-top:-15px;"></v-text-field>
                                     <v-btn @click="Remodify" large outlined style="width:40%; margin: 0 30%; margin-bottom: 50px;">정보수정</v-btn>
                                 </v-form>
@@ -70,7 +70,7 @@
                             <v-tab-item>
                                 <v-form style="width: 50%; margin: 50px 25%">
                                     <div style="width: 100%; padding: 25px; border: 2px solid black; background-color: yellow;">
-                                        <h5 style="text-align: center; color: red;">경고: 회원 탈퇴하면 사용자가 게시한 모든 게시물과 구독, 쪽지, 회원 정보가 DB에서 즉시 파기되며, 절대로 복구할 수 없게 됩니다.</h5>
+                                        <h5 style="text-align: center; color: red;">경고: 회원 탈퇴하면 사용자가 게시한 모든 게시물과 친구, 쪽지, 회원 정보가 DB에서 즉시 파기되며, 절대로 복구할 수 없게 됩니다.</h5>
                                     </div>
                                     <v-text-field v-model="user.userid" label="아이디" style="margin-top: 15px;"></v-text-field>
                                     <v-text-field @keyup.enter="Resign" type="password" v-model="user.userpw" label="비밀번호" style="margin-top: 15px;"></v-text-field>

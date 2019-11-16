@@ -67,7 +67,7 @@
             <v-container>
                 <v-layout>
                     <v-flex xs12 justify-center>
-                        덕후존 ver 0.0.1.8 | All-rights-reserved - HyperSoft.co.ltd - Dev. HyperTech99
+                        덕후존 ver 0.0.2.5 | All-rights-reserved - HyperSoft - Dev. HyperTech99
                     </v-flex>
                 </v-layout>
             </v-container>

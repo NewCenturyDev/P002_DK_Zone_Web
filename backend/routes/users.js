@@ -251,6 +251,7 @@ router.post('/idfinder', function(req, res){
   /* 변수 선언 */
   //양식을 임시 저장할 객체
   var auth = {
+    "name": req.body.user.name,
     "email": req.body.user.email
   }
   let result;
@@ -269,7 +270,7 @@ router.post('/idfinder', function(req, res){
     }
     else{
       for(var i=0; i<rows.length; i++){
-        if(rows[i].email == auth.email){
+        if(rows[i].email == auth.email && rows[i].name == auth.name){
           console.log('id조회 처리 시작');
           //email이 일치하는 member의 열에서 id 반환
           result = '해당 정보로 조회한 사용자의 ID는 ' + rows[i].id + ' 입니다.';

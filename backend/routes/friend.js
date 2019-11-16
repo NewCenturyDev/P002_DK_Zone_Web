@@ -54,7 +54,7 @@ router.post('/add', function(req, res){
     var user = req.session.user;
     var keyword = req.body.keyword;
     var sql = 'SELECT * FROM member where email = "' + keyword + '"';
-    var sql2 = 'INSERT INTO friend (my_id, friend_nick, friend_photo, friend_bio) VALUES(?, ?, ?, ?)';
+    var sql2 = 'INSERT INTO friend (my_id, friend_id, friend_nick, friend_photo, friend_bio) VALUES(?, ?, ?, ?, ?)';
     var params;
 
     connection.query(sql, function(err, rows){
@@ -75,7 +75,7 @@ router.post('/add', function(req, res){
                 return;
             }
             else{
-                params = [user.id, rows[0].nick, rows[0].photo, rows[0].bio]
+                params = [user.id, rows[0].id, rows[0].nick, rows[0].photo, rows[0].bio]
                 connection.query(sql2, params, function(err2){
                     if(err2){
                         console.log('추가 실패 - ', err2);
