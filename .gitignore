@@ -1,5 +1,5 @@
 # 노드 패키지 파일 (최상단 폴더)
-node_modules/
+node_modules
 package.json
 package-lock.json
 yarn.lock
