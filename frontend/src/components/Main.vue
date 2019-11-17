@@ -45,10 +45,11 @@
             <v-layout wrap justify-center>
                 <v-flex xs12 sm9 md6>
                     <!-- 피드 양식 (데이터 반복자 사용) - 실제로는 백엔드에서 DB내용을 싹 읽어서 data() 양식안에 배열로 넣어주고 반복문 돌려서 프론트에 추가해주는 것으로 만들 예정-->
-                    <v-data-iterator :items="Feeds" :rows-per-page-items="RowsPerPage" :pagination.sync="Pagination" content-tag="v-layout" row wrap>
+                    <v-data-iterator :items="Feeds" :rows-per-page-items="RowsPerPage" :pagination.sync="Pagination" no-data-text="본인 또는 친구가 올린 게시물이 없습니다. 게시물을 작성하거나 친구를 더 추가해 보세요." row wrap>
                         <v-flex xs12 slot="item" slot-scope="props">
                             <v-card class="feed" style="margin: 15px;">
-                                <v-img class="feed_image" :src=props.item.feed_image></v-img>
+                                <v-img :class="{ active: IsActive1(props.item.feed_type) }" style="width=500px; height=300px;" :src=props.item.feed_file></v-img>
+                                <video :class="{ active: IsActive2(props.item.feed_type) }" controls width="100%" height="100%" :src=props.item.feed_file></video>
                                 <v-card-title primary-title class="feed_title">
                                     <div>
                                         <h3 class="headline mb-0" style="width:100%;"> {{props.item.feed_title}} </h3>
@@ -57,24 +58,37 @@
                                 <v-card-text class="feed_text">
                                     <div> {{props.item.feed_text}} </div>
                                     <br/>
-                                    <div style="float: left; font-size: 13px;"> {{props.item.feed_user_id}} </div>
-                                    <div style="float: right; font-size: 11px;"> {{props.item.feed_timestamp}} </div>
+                                    <div style="float: left; font-size: 13px;"> {{props.item.feed_nick}} </div>
+                                    <div style="float: right; font-size: 11px;"> {{props.item.feed_time}} </div>
                                 </v-card-text>
                                 <v-card-text class="feed_tags">
-                                    <v-btn small text disabled>{{props.item.feed_tags[0]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[1]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[2]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[3]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[4]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[5]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[6]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[7]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[8]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[9]}}</v-btn>
+                                    <!-- 태그 5개 (v-for 태그로 반복자 처리해도 되나 검색 알고리즘 및 DB의 간소화를 위해 10개로 태그 갯수를 제한하였으므로 디버깅이 용이하도록 0~9 복붙 처리함) -->
+                                    <v-btn small text disabled>{{props.item.feed_tag1}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag2}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag3}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag4}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag5}}</v-btn>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn icon><v-icon>thumb_up_alt</v-icon> {{props.item.feed_likes}} </v-btn>
-                                    <v-btn icon><v-icon>share</v-icon></v-btn>
+                                    <v-btn icon @click="LikeFeed(props.item.feed_num);"><v-icon>thumb_up_alt</v-icon> {{props.item.feed_likes}} </v-btn>
+                                    <!-- <v-btn icon><v-icon>share</v-icon></v-btn> -->
+                                    <v-btn icon :class="{ active: IsMyFeed(props.item.feed_nick) }" @click.stop="$set(feedremovemodal, props.item.feed_num, true)"><v-icon>delete</v-icon></v-btn>
+                                    <v-dialog v-model="feedremovemodal[props.item.feed_num]" width="400">
+                                        <v-card>
+                                            <v-card-title>
+                                                <h4> 게시물 삭제 </h4>
+                                            </v-card-title>
+                                            <v-card-text>
+                                                정말로 삭제하시겠습니까? 삭제한 게시물은 복구할 수 없습니다.
+                                            </v-card-text>
+                                            <v-divider></v-divider>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn color="primary" text @click="RemoveFeeds(props.item.feed_num)">삭제</v-btn>
+                                                <v-btn color="primary" text @click.stop="$set(feedremovemodal, props.item.feed_num, false)">취소</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
                                 </v-card-actions>
                             </v-card>
                         </v-flex>
@@ -113,41 +127,24 @@ export default {
             pagination: {
                 rowsPerPage: 1
             },
-            Feeds: [
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드1 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 3,
-                    feed_tags: ["#굿즈","#마블","#카카오프렌즈","#악세사리"],
-                    feed_user_id: "testuser1",
-                    feed_timestamp: "2018-01-02"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드2 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 8,
-                    feed_tags: ["#테스트","#과연이거만들수있을까"],
-                    feed_user_id: "testuser2",
-                    feed_timestamp: "2019-08-02"
-                },
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                }
-            ],
+            feedremovemodal: {},
+            myfeed: {},
+            Feeds: []
         }
     },
     methods: {
+        CheckSession: function () {
+            this.$http.get('/users/check')
+            .then((res) => {
+                if(res.data.islogin != true){
+                    alert("로그인한 사용자만 이용할 수 있는 기능입니다.");
+                    this.$router.push('/');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
+        },
         //eslint-disable-next-line
         Logout: function (event) {
             this.$http.get('/users/logout')
@@ -160,6 +157,15 @@ export default {
             .catch(function (err) {
                 alert(err);
             })
+        },
+        gotoMain: function(){
+            this.$router.push('/lists');
+        },
+        gotoCreate: function(){
+            this.$router.push('/create');
+        },
+        gotoSearch: function (){
+            this.$router.push('/search');
         },
         LoadProfile: function () {
             let self = this;
@@ -183,21 +189,78 @@ export default {
                 alert(err);
             });
         },
-        gotoMain: function(){
-            this.$router.push('/lists');
+        LoadFeeds: function (){
+            let self = this;
+            this.$http.get('/feed/load')
+            .then((res) => {
+                if(res.data == null){
+                    alert("DB 오류");
+                    //self.Logout();
+                    return;
+                }
+                else{
+                    self.Feeds = res.data;
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         },
-        gotoCreate: function(){
-            this.$router.push('/create');
+        RemoveFeeds: function(removethis){
+            this.$http.post('/feed/remove', {
+                keyword: removethis
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    alert(res.data.message);
+                    this.$router.go('/lists');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/lists');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         },
-        gotoSearch: function (){
-            this.$router.push('/search');
+        IsActive1: function(type){
+            if(type == 1){
+                return false;
+            }
+            else{
+                return true;
+            }
+        },
+        IsActive2: function(type){
+            if(type == 2 || type == 3){
+                return false;
+            }
+            else{
+                return true;
+            }
+        },
+        IsMyFeed: function(nick){
+            if(nick == this.Current_UserInfo.nick){
+                return false;
+            }
+            else{
+                return true;
+            }
         }
     },
     beforeMount() {
+        this.LoadFeeds();
         this.LoadProfile();
+    },
+    created() {
+        this.CheckSession();
     }
 }
 </script>
 
 <style scoped>
+.active{
+    display: none;
+}
 </style>

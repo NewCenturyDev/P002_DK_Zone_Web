@@ -6,6 +6,7 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
+var fs = require("fs-extra");
 
 /* DB 정보 */
 var connection = mysql.createConnection({
@@ -32,6 +33,20 @@ connection.query('USE dkzone', function(err){
 //Vue.js 기반으로 개발하여 페이지뷰 라우팅은 Vue-router 측에서 실행하므로 페이지뷰(EJS 등록)은 불필요함.
 
 /*------------------------------ 회원 관련 기능 ------------------------------*/
+//로그인 여부 확인 알고리즘
+router.get('/check', function(req, res){
+  if(req.session.user){
+    res.json({
+      islogin: true
+    });
+  }
+  else{
+    res.json({
+      islogin: false
+    });
+  }
+});
+
 //로그인 처리 알고리즘
 router.post('/login', function(req, res){
   /* 변수 선언 */
@@ -180,6 +195,7 @@ router.post('/signup', function(req, res){
           return;
         }
         else {
+          fs.mkdirSync('public/Files/' + info.userid); //데이터 저장용 폴더 생성
           res.json ({
             success: 1,
             message: '회원가입이 완료되었습니다.'
@@ -205,6 +221,23 @@ router.post('/resign', function(req, res){
   var sql = 'SELECT id FROM member WHERE id = ? AND pw = ?';
   var params_s = [auth.id, auth.pw];
   var params_d;
+  //폴더 삭제 알고리즘
+  var deleteFolderRecursive = function(path){
+    //내용물(파일)전부 삭제 후 폴더 삭제 (재귀방식)
+    if ( fs.existsSync(path) ){
+      fs.readdirSync(path).forEach(function(file,index){
+        var curPath = path + "/" + file;
+        if(fs.lstatSync(curPath).isDirectory()){
+          //폴더라면 내용물 먼저 재귀 삭제
+          deleteFolderRecursive(curPath);
+        }
+        else{
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(path);
+    }
+  }
   /* 알고리즘 */
   //세션정보 검증 (세션정보의 id값으로 DB에서 비밀번호 조회)
   connection.query(sql, params_s, function(err, rows, fields){
@@ -233,6 +266,7 @@ router.post('/resign', function(req, res){
           return;
         }
         else {
+          deleteFolderRecursive('public/Files/' + user.id);  //데이터 저장용 폴더 삭제
           res.json ({
             success: 1,
             message: '회원 탈퇴 되었습니다!'

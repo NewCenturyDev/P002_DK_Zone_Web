@@ -84,6 +84,18 @@ export default {
         }
     },
     methods:{
+        CheckSession: function () {
+            this.$http.get('/users/check')
+            .then((res) => {
+                if(res.data.islogin != false){
+                    alert("이미 로그인 되어 있습니다.");
+                    this.$router.push('/lists');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
+        },
         gotoIntro: function(){
             this.$router.push('/');
         },
@@ -93,6 +105,9 @@ export default {
         gotoRegister: function (){
             this.$router.push('/auth/register');
         }
+    },
+    created() {
+        this.CheckSession();
     }
 }
 </script>

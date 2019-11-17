@@ -173,6 +173,18 @@ export default {
         }
     },
     methods: {
+        CheckSession: function () {
+            this.$http.get('/users/check')
+            .then((res) => {
+                if(res.data.islogin != true){
+                    alert("로그인한 사용자만 이용할 수 있는 기능입니다.");
+                    this.$router.push('/');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
+        },
         //eslint-disable-next-line
         Logout: function (event) {
             this.$http.get('/users/logout')
@@ -220,6 +232,9 @@ export default {
     },
     beforeMount() {
         this.LoadProfile();
+    },
+    created() {
+        this.CheckSession();
     }
 }
 </script>

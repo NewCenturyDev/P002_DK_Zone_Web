@@ -63,6 +63,18 @@ export default {
         }
     },
     methods:{
+        CheckSession: function () {
+            this.$http.get('/users/check')
+            .then((res) => {
+                if(res.data.islogin != false){
+                    alert("이미 로그인 되어 있습니다.");
+                    this.$router.push('/lists');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            })
+        },
         Findid: function(){
             let self = this;
             this.$http.post('/users/idfinder',{
@@ -121,6 +133,9 @@ export default {
             this.user.name = '';
             this.user.email = '';
         }
+    },
+    created() {
+        this.CheckSession();
     }
 }
 </script>
