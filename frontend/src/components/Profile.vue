@@ -60,7 +60,7 @@
                                         <v-btn small text @click="Changebio" style="margin-top 10px;">변경</v-btn>
                                     </v-form>
                                     <v-form id="modifyphoto" :class="{ active: !this.mode2 }">
-                                        <v-file-input label="새 프로필 사진" style="margin-top: 15px;"></v-file-input>
+                                        <v-file-input label="새 프로필 사진" v-model="files" show-size accept="image/*" style="margin-top: 15px;"></v-file-input>
                                         <v-btn small text @click="Changephoto" style="margin-top 10px;">변경</v-btn>
                                     </v-form>
                                 </v-flex>
@@ -118,7 +118,7 @@ export default {
                 userbio: ""
             },
             New_userbio: "",
-            New_photo: "",
+            files: null,
             mode1: false,
             mode2: false,
             drawer: null,
@@ -210,7 +210,36 @@ export default {
             });
         },
         Changephoto: function(){
-            //TODO
+            let self = this;
+            let formData = new FormData();
+            if(this.files){
+                formData.append("files", this.files);
+                this.$http.post("/profile/modifyphoto", formData)
+                .then((res) => {
+                    if(res.data.success == 1){
+                        alert(res.data.message);
+                        self.files = null;
+                        this.$router.go('/profile');
+                    }
+                    else{
+                        alert(res.data.message);
+                        self.files = null;
+                    }
+                })
+                .catch(function (err) {
+                    alert(err);
+                });
+            }
+            else{
+                this.$http.get("/profile/deletephoto")
+                .then((res) => {
+                    alert(res.data.message);
+                    this.$router.go('/profile');
+                })
+                .catch(function (err) {
+                    alert(err);
+                });
+            }
         }
     },
     beforeMount() {

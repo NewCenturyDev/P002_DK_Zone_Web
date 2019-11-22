@@ -6,6 +6,8 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
+var multer = require('multer');
+var fs = require("fs-extra");
 
 /* DB 정보 */
 var connection = mysql.createConnection({
@@ -99,4 +101,90 @@ router.post('/modifybio', function(req, res){
 });
 /*---------------------------- 개인 메시지 변경 기능 끝 ----------------------------*/
 
+/*------------------------------ 프로필 사진 변경 기능 ------------------------------*/
+router.post('/modifyphoto', function(req, res){
+    /* 변수 선언 */
+    let user = req.session.user;
+    let fileroute;
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            const ls = 'public/Profiles/';
+            console.log(ls);
+            cb(null, ls);
+        },
+        filename: function (req, file, cb) {
+            const name = req.session.user.id + '.png';
+            console.log(name);
+            cb(null, name);
+        }
+    });
+    let upload = multer({storage: storage}).single("files");
+    let sql = 'UPDATE member SET photo = ? WHERE id = ?';
+    let params = [];
+
+    /* 파일 저장 */
+    if (fs.existsSync('public/Profiles/' + user.id + '.png')) {    //기존 파일이 있으면 삭제
+        fs.unlink('public/Profiles/' + user.id + '.png');
+    }
+    upload(req, res, function(err) {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: 0,
+                message: '파일 업로드 실패'
+            });
+            return;
+        }
+        else {
+            console.log('업로드 완료');
+            fileroute = 'Profiles/' + user.id + '.png';
+            console.log(fileroute);
+
+            /* DB 갱신 */
+            params = [fileroute, user.id];
+            connection.query(sql, params, function(err){
+                if(err) {
+                    console.log('프로필 사진 수정 실패 - ', err);
+                    res.json ({
+                        success: 0,
+                        message: "서버측 사정으로 DB오류가 발생하였습니다. 다음에 다시 이용해 주십시오."
+                    });
+                }
+                else {
+                    console.log('프로필 사진 수정 완료');
+                    res.json ({
+                        success: 1,
+                        message: "프로필 사진이 변경 되었습니다."
+                    });
+                }
+            });
+        }
+    });
+});
+/*---------------------------- 프로필 사진 변경 기능 끝 ----------------------------*/
+
+/*------------------------------ 프로필 사진 삭제 기능 ------------------------------*/
+router.get('/deletephoto', function(req, res){
+    /* 변수 선언 */
+    let user = req.session.user;
+    let sql = 'UPDATE member SET photo = ? WHERE id = ?';
+    let params = [null, user.id];
+
+    /* DB 갱신 */
+    connection.query(sql, params, function(err){
+        if(err) {
+            console.log('프로필 사진 삭제 실패 - ', err);
+            res.json ({
+                message: "서버측 사정으로 DB오류가 발생하였습니다. 다음에 다시 이용해 주십시오."
+            });
+        }
+        else {
+            console.log('프로필 사진 삭제 완료');
+            res.json ({
+                message: "프로필 사진이 기본 이미지로 변경 되었습니다."
+            });
+        }
+    });
+});
+/*---------------------------- 프로필 사진 삭제 기능 끝 ----------------------------*/
 module.exports = router;

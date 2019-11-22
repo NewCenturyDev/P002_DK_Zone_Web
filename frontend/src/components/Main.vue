@@ -70,8 +70,31 @@
                                     <v-btn small text disabled>{{props.item.feed_tag5}}</v-btn>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn icon @click="LikeFeed(props.item.feed_num);"><v-icon>thumb_up_alt</v-icon> {{props.item.feed_likes}} </v-btn>
+                                    <v-btn icon @click="LikeFeed(props.item.feed_num);"><v-icon>thumb_up_alt</v-icon> {{props.item.feed_like}} </v-btn>
                                     <!-- <v-btn icon><v-icon>share</v-icon></v-btn> -->
+                                    <v-btn icon :class="{ active: IsMyFeed(props.item.feed_nick) }" @click="ModifyFeedsLoad(props.item.feed_num)"><v-icon>edit</v-icon></v-btn>
+                                    <v-dialog v-model="feedmodifymodal[props.item.feed_num]" width="400">
+                                        <v-card>
+                                            <v-card-title>
+                                                <h4> 게시물 수정 </h4>
+                                            </v-card-title>
+                                            <v-card-text>
+                                                사진이나 동영상을 수정하시려면 게시물을 삭제하시고 다시 작성하여 주십시오. 게시물 태그의 경우 기존 태그들이 전부 삭제되고 덮어쓰기 됩니다.
+                                            </v-card-text>
+                                            <v-form style="width: 350px; margin: 5px 25px;">
+                                                <v-text-field label="제목" v-model="newFeed.title"></v-text-field>
+                                                <v-textarea label="내용" auto-grow=true; v-model="newFeed.text" style="margin-top:-15px;"></v-textarea>
+                                                <v-text-field label="태그 (쉼표로 구분 / 최대 5개)" v-model="newFeed.tag" style="margin-top:-15px;"></v-text-field>
+                                            </v-form>
+                                            <v-divider></v-divider>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn color="primary" text @click="ModifyFeeds(props.item.feed_num)">수정</v-btn>
+                                                <v-btn color="primary" text @click="CloseModifyModal(props.item.feed_num)">취소</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                    
                                     <v-btn icon :class="{ active: IsMyFeed(props.item.feed_nick) }" @click.stop="$set(feedremovemodal, props.item.feed_num, true)"><v-icon>delete</v-icon></v-btn>
                                     <v-dialog v-model="feedremovemodal[props.item.feed_num]" width="400">
                                         <v-card>
@@ -128,8 +151,14 @@ export default {
                 rowsPerPage: 1
             },
             feedremovemodal: {},
+            feedmodifymodal: {},
+            newFeed: {
+                title: "",
+                text: "",
+                tag: ""
+            },
             myfeed: {},
-            Feeds: []
+            Feeds: [],
         }
     },
     methods: {
@@ -200,6 +229,69 @@ export default {
                 }
                 else{
                     self.Feeds = res.data;
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        LikeFeed: function(likethis){
+            this.$http.post('/feed/like', {
+                keyword: likethis
+            })
+            .then((res) => {
+                alert(res.data.message);
+                this.$router.go('/lists');
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        CloseModifyModal: function(modifythis) {
+            this.newFeed.title = '';
+            this.newFeed.text = '';
+            this.newFeed.tag = '';
+            this.feedmodifymodal[modifythis] = false;
+        },
+        ModifyFeedsLoad: function(modifythis){
+            let self = this;
+            this.$http.post('/feed/loadmodify', {
+                keyword: modifythis
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    self.newFeed.title = res.data.newtitle;
+                    self.newFeed.text = res.data.newtext;
+                    self.feedmodifymodal[modifythis] = true;
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/lists');
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
+        },
+        ModifyFeeds: function(removethis){
+            let self = this;
+            this.$http.post('/feed/modify', {
+                keyword: removethis,
+                newtitle: self.newFeed.title,
+                newtext: self.newFeed.text,
+                newtag: self.newFeed.tag
+            })
+            .then((res) => {
+                if(res.data.success == 1){
+                    self.newFeed.title = '';
+                    self.newFeed.text = '';
+                    self.newFeed.tag = '';
+                    alert(res.data.message);
+                    this.$router.go('/lists');
+                }
+                else{
+                    alert(res.data.message);
+                    this.$router.go('/lists');
                 }
             })
             .catch(function (err) {

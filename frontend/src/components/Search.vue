@@ -3,11 +3,12 @@
         <!-- 상단바 -->
         <nav>
             <v-toolbar color="cyan" light>
-                <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-toolbar-title @click="gotoMain" style="color: white; margin-left: 20px; cursor: pointer;">DK-Zone</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items style="width: 350px;">
-                    <v-form style="width: 100%; margin-top: 15px;">
-                        <v-text-field light color="white" placeholder="검색"></v-text-field>
+                    <v-form style="width: 350px; margin-top: 15px;">
+                        <v-text-field v-model="Keyword" light color="white" style="width: 300px; float: left;" placeholder="검색"></v-text-field>
+                        <v-btn icon @click="SearchFeed" style="width: 50px; float:left;"><v-icon>search</v-icon></v-btn>
                     </v-form>
                 </v-toolbar-items>
                 <v-spacer></v-spacer>
@@ -16,33 +17,6 @@
                 </v-toolbar-items>
             </v-toolbar>
         </nav>
-        <!-- 좌측 탭 메뉴 -->
-        <v-navigation-drawer v-model="drawer" absolute temporary>
-            <v-list-item>
-                <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                    <v-list-item-title> {{ Current_UserName }} </v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-            <v-divider></v-divider>
-            <v-list dense>
-                <v-list-item v-for="item in Menuitems" :key="item.title" :to="item.url" link>
-                    <v-list-item-title>
-                        <v-list-item-title> {{ item.title }} </v-list-item-title>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list>
-            <v-divider></v-divider>
-            <v-list dense>
-                <v-list-item v-for="item in Menuitems2" :key="item.title" :to="item.url" link>
-                    <v-list-item-title>
-                        <v-list-item-title> {{ item.title }} </v-list-item-title>
-                    </v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
         <!-- 검색결과 -->
         <v-container id="feeds">
             <v-layout wrap justify-center>
@@ -53,10 +27,11 @@
             <v-layout wrap justify-center>
                 <v-flex xs12 sm9 md6>
                     <!-- 피드 양식 (데이터 반복자 사용) - 실제로는 백엔드에서 DB내용을 싹 읽어서 data() 양식안에 배열로 넣어주고 반복문 돌려서 프론트에 추가해주는 것으로 만들 예정-->
-                    <v-data-iterator :items="Feeds" :rows-per-page-items="RowsPerPage" :pagination.sync="Pagination" content-tag="v-layout" row wrap>
+                    <v-data-iterator :items="Feeds" :rows-per-page-items="RowsPerPage" :pagination.sync="Pagination" no-data-text="검색창에 키워드를 입력하고 검색 버튼을 눌러 검색하세요" row wrap>
                         <v-flex xs12 slot="item" slot-scope="props">
                             <v-card class="feed" style="margin: 15px;">
-                                <v-img class="feed_image" :src=props.item.feed_image></v-img>
+                                <v-img :class="{ active: IsActive1(props.item.feed_type) }" style="width=500px; height=300px;" :src=props.item.feed_file></v-img>
+                                <video :class="{ active: IsActive2(props.item.feed_type) }" controls width="100%" height="100%" :src=props.item.feed_file></video>
                                 <v-card-title primary-title class="feed_title">
                                     <div>
                                         <h3 class="headline mb-0" style="width:100%;"> {{props.item.feed_title}} </h3>
@@ -65,24 +40,20 @@
                                 <v-card-text class="feed_text">
                                     <div> {{props.item.feed_text}} </div>
                                     <br/>
-                                    <div style="float: left; font-size: 13px;"> {{props.item.feed_user_id}} </div>
-                                    <div style="float: right; font-size: 11px;"> {{props.item.feed_timestamp}} </div>
+                                    <div style="float: left; font-size: 13px;"> {{props.item.feed_nick}} </div>
+                                    <div style="float: right; font-size: 11px;"> {{props.item.feed_time}} </div>
                                 </v-card-text>
                                 <v-card-text class="feed_tags">
-                                    <v-btn small text disabled>{{props.item.feed_tags[0]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[1]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[2]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[3]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[4]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[5]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[6]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[7]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[8]}}</v-btn>
-                                    <v-btn small text disabled>{{props.item.feed_tags[9]}}</v-btn>
+                                    <!-- 태그 5개 (v-for 태그로 반복자 처리해도 되나 검색 알고리즘 및 DB의 간소화를 위해 10개로 태그 갯수를 제한하였으므로 디버깅이 용이하도록 0~9 복붙 처리함) -->
+                                    <v-btn small text disabled>{{props.item.feed_tag1}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag2}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag3}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag4}}</v-btn>
+                                    <v-btn small text disabled>{{props.item.feed_tag5}}</v-btn>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-btn icon><v-icon>thumb_up_alt</v-icon> {{props.item.feed_likes}} </v-btn>
-                                    <v-btn icon><v-icon>share</v-icon></v-btn>
+                                    <v-btn icon @click="LikeFeed(props.item.feed_num);"><v-icon>thumb_up_alt</v-icon> {{props.item.feed_like}} </v-btn>
+                                    <!-- <v-btn icon><v-icon>share</v-icon></v-btn> -->
                                 </v-card-actions>
                             </v-card>
                         </v-flex>
@@ -97,37 +68,12 @@
 export default {
     data(){
         return{
-            Keyword: "#콩진호",
-            Current_UserName: "TestUser",
-            drawer: null,
-            Menuitems: [
-                {title: '덕후 타임라인', url:'/lists'},
-                {title: '덕후 핫이슈', url:'/issue'},
-                {title: '덕후 핫플레이스', url:'/place'},
-            ],
-            Menuitems2: [
-                {title: '내 프로필', url:'/profile'},
-                {title: '스크랩 북', url:'/scrap'},
-                {title: '쪽지함', url:'/msgbox'},
-                {title: '설정', url:'/setting'}
-            ],
+            Keyword: '',
             rowsPerPageItems: [1],
             pagination: {
                 rowsPerPage: 1
             },
-            Feeds: [
-                {
-                    feed_profile_img: "http://placehold.it/30x30",
-                    feed_image: "http://placehold.it/500x300",
-                    feed_title: "피드3 제목",
-                    feed_text: "피드의 내용(텍스트)가 들어갈 자리입니다. Lorem ipsum dolor sit amet",
-                    feed_likes: 22,
-                    feed_tags: ["#테스트2","#과연이거만들수있을까22","#콩진호"],
-                    feed_user_id: "testuser3",
-                    feed_timestamp: "2019-09-20"
-                },
-                
-            ],
+            Feeds: [],
         }
     },
     methods: {
@@ -159,11 +105,56 @@ export default {
         gotoMain: function(){
             this.$router.push('/lists');
         },
-        gotoCreate: function(){
-            this.$router.push('/create');
+        SearchFeed: function(){
+            let self = this;
+            this.$http.post('/feed/searchfeed', {
+                keyword: self.Keyword
+            })
+            .then((res) => {
+                if(res.data == null){
+                    if(self.Keyword == ''){
+                        alert('검색어를 입력해주세요!');
+                    }
+                    else{
+                        alert('DB 오류');
+                    }
+                    this.$router.go('/search');
+                }
+                else{
+                    self.Feeds = res.data;
+                }
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         },
-        gotoSearch: function (){
-            this.$router.push('/search');
+        IsActive1: function(type){
+            if(type == 1){
+                return false;
+            }
+            else{
+                return true;
+            }
+        },
+        IsActive2: function(type){
+            if(type == 2 || type == 3){
+                return false;
+            }
+            else{
+                return true;
+            }
+        },
+        LikeFeed: function(likethis){
+            this.$http.post('/feed/like', {
+                keyword: likethis
+            })
+            .then((res) => {
+                alert(res.data.message);
+                this.$router.go('/lists');
+            })
+            .catch(function (err) {
+                alert(err);
+            });
         }
     },
     created() {
@@ -173,4 +164,7 @@ export default {
 </script>
 
 <style scoped>
+.active{
+    display: none;
+}
 </style>

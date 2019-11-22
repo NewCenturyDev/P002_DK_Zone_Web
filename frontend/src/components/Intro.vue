@@ -12,7 +12,8 @@
             <v-layout style="margin: 20px" justify-center>
                 <v-flex xs12 sm9>
                     <v-card>
-                        <v-img src="http://placehold.it/2000x500"></v-img>
+                        <v-img src="main.jpg"></v-img>
+                        <v-card-text>타인이 기획한 내용을 바탕으로 구현하였으며, 해당 기획안은 HyperTech99와 관련이 없습니다.</v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -20,45 +21,22 @@
                 <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
-                        <v-card-title primary-title>{{hot_topic[0]}}</v-card-title>
-                        <v-card-text>{{hot_topic_text[0]}}</v-card-text>
+                        <v-card-title primary-title>단순</v-card-title>
+                        <v-card-text>직관적 인터페이스, 심플한 사진/텍스트</v-card-text>
                     </v-card>
                 </v-flex>
                 <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
-                        <v-card-title primary-title>{{hot_topic[1]}}</v-card-title>
-                        <v-card-text>{{hot_topic_text[1]}}</v-card-text>
+                        <v-card-title primary-title>선택</v-card-title>
+                        <v-card-text>피드의 선택적 구성, 개인화된 저장, 검색</v-card-text>
                     </v-card>
                 </v-flex>
                 <v-flex xs12 sm3>
                     <v-card style="margin: 15px">
                         <v-img src="http://placehold.it/600x250"></v-img>
-                        <v-card-title primary-title>{{hot_topic[2]}}</v-card-title>
-                        <v-card-text>{{hot_topic_text[2]}}</v-card-text>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-            <v-layout wrap justify-center>
-                <v-flex xs12 sm3>
-                    <v-card style="margin: 15px">
-                        <v-img src="http://placehold.it/600x250"></v-img>
-                        <v-card-title primary-title>Service Promotion 1</v-card-title>
-                        <v-card-text>사용자들과 덕후존을 공유해 보세요!</v-card-text>
-                    </v-card>
-                </v-flex>
-                <v-flex xs12 sm3>
-                    <v-card style="margin: 15px">
-                        <v-img src="http://placehold.it/600x250"></v-img>
-                        <v-card-title primary-title>Service Promotion 2</v-card-title>
-                        <v-card-text>사용자들과 덕후존을 공유해 보세요!</v-card-text>
-                    </v-card>
-                </v-flex>
-                <v-flex xs12 sm3>
-                    <v-card style="margin: 15px">
-                        <v-img src="http://placehold.it/600x250"></v-img>
-                        <v-card-title primary-title>Service Promotion 3</v-card-title>
-                        <v-card-text>사용자들과 덕후존을 공유해 보세요!</v-card-text>
+                        <v-card-title primary-title>재미</v-card-title>
+                        <v-card-text>과시하는 즐거움, 공유하는 즐거움</v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -67,7 +45,7 @@
             <v-container>
                 <v-layout>
                     <v-flex xs12 justify-center>
-                        덕후존 ver 0.0.2.5 | All-rights-reserved - HyperSoft - Dev. HyperTech99
+                        덕후존 ver 0.0.5.0 | All-rights-reserved - HyperSoft - Dev. HyperTech99
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -78,10 +56,7 @@
 <script>
 export default {
     data(){
-        return{
-            hot_topic:["Hot Topic 1","Hot Topic 2","Hot Topic 3"],
-            hot_topic_text:["이것이 나의 덕후존이다!","마블 히어로즈 총집합!","BTS 컬렉션!"]
-        }
+        return{}
     },
     methods:{
         CheckSession: function () {

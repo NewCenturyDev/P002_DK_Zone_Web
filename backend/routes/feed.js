@@ -182,6 +182,88 @@ router.post('/uploadfile', function(req, res){
 });
 /*---------------------------- 게시물 작성 기능 (파일) 끝 ----------------------------*/
 
+/*------------------------------ 게시물 수정 기능 ------------------------------*/
+router.post('/loadmodify', function(req, res){
+    let keyword = req.body.keyword;
+    let sql = 'SELECT feed_title, feed_text FROM feed where feed_num = "' + keyword + '"';
+    connection.query(sql, function(err,rows){
+        if(err){
+            console.log('게시물 정보 조회 실패 - ', err);
+            res.json({
+                success: 0,
+                message: 'DB 조회 오류'
+            });
+        }
+        else{
+            res.json({
+                success: 1,
+                newtitle: rows[0].feed_title,
+                newtext: rows[0].feed_text
+            });
+        }
+    });
+});
+
+router.post('/modify', function(req, res){
+    let keyword = req.body.keyword;
+    let title = req.body.newtitle;
+    let text = req.body.newtext;
+    let rawtag = req.body.newtag;
+    let tags;
+    let sql = 'UPDATE feed SET feed_title = ?, feed_text = ?, feed_tag1 = ?, feed_tag2 = ?, feed_tag3 = ?, feed_tag4 = ?, feed_tag5 = ? where feed_num = "' + keyword + '"';
+    let params = [];
+
+    if(title == ''){
+        res.json({
+            success: 0,
+            message: '게시물 제목을 작성해주세요'
+        });
+        return;
+    }
+    if(title.length > 50){
+        res.json({
+            success: 0,
+            message: '게시물 제목은 50자 이하여야 합니다.'
+        });
+        return;
+    }
+    if(text == ''){
+        res.json({
+            success: 0,
+            message: '게시물 내용을 작성해주세요'
+        });
+        return;
+    }
+    if(text.length > 5000){
+        res.json({
+            success: 0,
+            message: '게시물 내용은 5000자 이하여야 합니다.'
+        });
+        return;
+    }
+
+    //태그 5개 구분
+    tags = rawtag.split(',', 5);
+    params = [title, text, tags[0], tags[1], tags[2], tags[3], tags[4]];
+    connection.query(sql, params, function(err){
+        if(err){
+            console.log('게시물 정보 업데이트 실패 - ', err);
+            res.json({
+                success: 0,
+                message: 'DB 조회 오류'
+            });
+            return;
+        }
+        else{
+            res.json({
+                success: 1,
+                message: '게시물이 수정되었습니다'
+            });
+        }
+    });
+});
+/*---------------------------- 게시물 수정 기능 끝 ----------------------------*/
+
 /*------------------------------ 게시물 삭제 기능 ------------------------------*/
 router.post('/remove', function(req, res){
     var keyword = req.body.keyword;
@@ -217,5 +299,52 @@ router.post('/remove', function(req, res){
     });
 });
 /*---------------------------- 게시물 삭제 기능 끝 ----------------------------*/
+
+/*---------------------------- 게시물 좋아요 기능 끝 ----------------------------*/
+router.post('/like', function(req, res){
+    let keyword = req.body.keyword;
+    let sql = 'UPDATE feed SET feed_like = feed_like + 1 where feed_num = "' + keyword + '"';
+    connection.query(sql, function(err){
+        if(err){
+            console.log('게시물 정보 업데이트 실패 - ', err);
+            res.json({
+                message: 'DB 조회 오류'
+            });
+            return;
+        }
+        else{
+            res.json({
+                message: '해당 게시물을 좋아합니다.'
+            });
+        }
+    });
+});
+/*---------------------------- 게시물 좋아요 기능 끝 ----------------------------*/
+
+/*---------------------------- 게시물 검색 기능 ----------------------------*/
+router.post('/searchfeed', function(req, res){
+    let keyword = req.body.keyword;
+    let keyword2 = '%' + req.body.keyword + '%';
+    let sql = 'SELECT * FROM feed WHERE feed_title LIKE ? OR feed_text LIKE ? OR feed_tag1 = ? OR feed_tag2 = ? OR feed_tag3 = ? OR feed_tag4 = ? OR feed_tag5 = ?';
+    let params = [keyword2, keyword2, keyword, keyword, keyword, keyword, keyword];
+    //태그는 키워드와 정확하게 일치하여야만 검색대상
+    //제목이나 내용은 키워드와 유사하면 검색대상
+    if(keyword == ''){
+        console.log('검색 키워드가 비어있습니다.');
+        res.json(null);
+        return;
+    }
+    connection.query(sql, params, function(err, rows){
+        if(err){
+            console.log('게시물 검색 실패 - ', err);
+            res.json(null);
+            return;
+        }
+        else{
+            res.json(rows);
+        }
+    });
+});
+/*---------------------------- 게시물 검색 기능 끝 ----------------------------*/
 
 module.exports = router;

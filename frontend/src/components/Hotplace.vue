@@ -42,6 +42,23 @@
         <!-- 핫플레이스 본문 -->
         <v-container id="feeds">
             <v-layout wrap justify-center>
+                <v-dialog v-model="betamodal" width="400">
+                    <v-card>
+                        <v-card-title>
+                            <h4> 베타 버전 </h4>
+                            </v-card-title>
+                        <v-card-text>
+                            본 기능은 전시장 운영회사(COEX, KINTEX 등) 사이트에서 기사나 포스트를 크롤링하고, 크롤링한 정보를 표시하게 설계되었습니다.
+                            하지만, 해당 홈페이지의 정책상, 전시회 정보 크롤링은 차단되어 있어 기능의 컨셉을 나타내기 위해
+                            직접 수작업으로 몇몇 전시회 정보를 복사해와서 테스트 데이터를 넣어 두었습니다.
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" text @click="betamodal = false">확인</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
                 <v-flex xs12 sm5>
                     <v-card style="margin: 10px;">
                         <v-img src="map.PNG"></v-img>
@@ -170,6 +187,7 @@ export default {
                 {title: '쪽지함', url:'/msgbox'},
                 {title: '설정', url:'/setting'}
             ],
+            betamodal: true
         }
     },
     methods: {
