@@ -7,13 +7,14 @@ yarn.lock
 # 노드 패키지 파일 (backend)
 backend/bin
 backend/node_modules
-backend/package.json
 backend/package-lock.json
 
 # 노드 패키지 파일 (frontend)
 frontend/node_modules
 frontend/.gitignore
-frontend/package.json
 frontend/package-lock.json
 frontend/README.md
 frontend/yarn.lock
+
+# DS 캐시 파일
+**/.DS_Store
