@@ -4,7 +4,6 @@ package-lock.json
 yarn.lock
 
 # 노드 패키지 파일 (backend)
-backend/bin
 backend/node_modules
 backend/package-lock.json
 
